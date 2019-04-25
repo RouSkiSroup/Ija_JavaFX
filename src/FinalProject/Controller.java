@@ -5,6 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,8 +16,9 @@ import java.util.Scanner;
 
 public class Controller implements Initializable {
 
-    public TextArea Text;
+    public TextArea NotationList;
     public Button first;
+    public ImageView testovaci;
 
     Board board = new Board(8);
     Chess chess = new Chess(board);
@@ -25,11 +28,12 @@ public class Controller implements Initializable {
         try {
             Scanner s = new Scanner(new File("./input.txt")).useDelimiter("\\n+");
             while (s.hasNext()) {
-                Text.appendText(s.next() + "\n"); // else read the next token
+                NotationList.appendText(s.next() + "\n"); // else read the next token
             }
         } catch (FileNotFoundException ex) {
             System.err.println(ex);
         }
+
     }
 
     public void startTest(ActionEvent actionEvent) {

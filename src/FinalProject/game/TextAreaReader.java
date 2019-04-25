@@ -12,6 +12,5 @@ public class TextAreaReader {
     }
 
     public void getLine(){
-        Controller.Text
     }
 }
