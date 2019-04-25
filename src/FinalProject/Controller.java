@@ -1,4 +1,4 @@
-package FinalProject.FX;
+package FinalProject;
 
 public class Controller {
 }
