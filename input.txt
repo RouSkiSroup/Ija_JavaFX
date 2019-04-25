@@ -1,0 +1,14 @@
+1. a2a3 a7a6
+2. h2h3 a6a5
+3. Jb1c3 a5a4
+4. Jc3a4 h7h6
+5. Ja4c5 g7g6
+6. a3a4 Va8a6
+7. a4a5 Va6e6
+8. a5a6 h6h5
+9. b2b3 Va8a7
+10. Va1a2 f7f6
+11. Va2a5 f6f5
+12. Va5a4 Vh8h7
+13. Va5b5 f5f4
+14. Vb5a5 f4f3
