@@ -34,6 +34,10 @@ public class Controller implements Initializable {
             System.err.println(ex);
         }
 
+        File file = new File("src/images/pb.png");
+        Image image = new Image(file.toURI().toString());
+        testovaci.setImage(image);
+
     }
 
     public void startTest(ActionEvent actionEvent) {
