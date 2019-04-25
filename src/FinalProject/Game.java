@@ -12,11 +12,16 @@ public class Game extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(new Scene(root, 1000, 800));
         primaryStage.show();
     }
     public static void main (String[] args) {
         launch(args);
+    }
+
+
+
+    private void test(String[] args){
         Board board = new Board(8);
         Chess chess = new Chess(board);
 
@@ -79,7 +84,6 @@ public class Game extends Application {
         //chess.next();
         chess.printBoardReadable();
         //==============================================
-
 
     }
 }
