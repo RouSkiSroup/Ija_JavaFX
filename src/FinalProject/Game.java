@@ -15,78 +15,44 @@ public class Game extends Application {
         primaryStage.setScene(new Scene(root, 1500, 1000));
         primaryStage.show();
     }
-    public static void main (String[] args) {
-        launch(args);
-    }
-    //public static void main (String[] args) {
-    //    test();
-    //}
-
-
-
-    private void test(String[] args){
-        Board board = new Board(8);
-        Chess chess = new Chess(board);
-
-        //Filip test===================================u666
-//        chess.printBoard();
+    public static void main (String[] args) { launch(args);}
+//    public static void main (String[] args) {
+//        Board board = new Board(8);
+//        Chess chess = new Chess(board);
 //
-//        System.out.println("==========================================================");
+//        if(args.length != 1) {
+//            System.err.println("Dej si do Run->Edit Configuration->Program arguments -> ./input.txt");
+//            System.exit(1);
+//        }
 //
-//        BoardField boardField = board.field[0][2];
-//        UniversalFigure figure = board.field[0][1].get();
-//        //chess.move(figure, boardField);
+//        //System.out.println(args[0]);
 //
-//        //chess.printBoard();
+//        chess.printBoardReadable();
 //
-//        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-//        //chess.restart();
-//        //chess.print();
+//        chess.parseNotations(args[0]);
+//        //chess.debugNotation();
+//        //chess.clearListFrom(1);
+//        //chess.debugNotation();
+//        chess.printNotation();
 //
-//        chess.manualMove(figure,boardField);
-//        chess.printBoard();
-//        System.out.println("Notace");
-        //chess.printNotation();
-        //
-        //testik
-        //
-        ///
-        //
-        //
-
-        if(args.length != 1) {
-            System.err.println("Dej si do Run->Edit Configuration->Program arguments -> ./input.txt");
-            System.exit(1);
-        }
-
-        //System.out.println(args[0]);
-
-        chess.printBoardReadable();
-
-        chess.parseNotations(args[0]);
-        //chess.debugNotation();
-        //chess.clearListFrom(1);
-        //chess.debugNotation();
-        chess.printNotation();
-
-        //chess.debugNotation();
-
-        //chess.next();
-
-        //chess.board.board[0][0].setFigure(null);
-
-        //chess.printBoardReadable();
-
-        for(int i = 0; i < chess.getMoves().size(); i ++){
-            chess.nextMove();
-        }
-        //chess.next();
-        //chess.printBoardReadable();
-        //chess.next();
-        //chess.printBoardReadable();
-        //chess.next();
-        chess.printBoardReadable();
-        //==============================================
-
-    }
+//        //chess.debugNotation();
+//
+//        //chess.next();
+//
+//        //chess.board.board[0][0].setFigure(null);
+//
+//        //chess.printBoardReadable();
+//
+//        for(int i = 0; i < chess.getMoves().size(); i ++){
+//            chess.nextMove();
+//        }
+//        //chess.next();
+//        //chess.printBoardReadable();
+//        //chess.next();
+//        //chess.printBoardReadable();
+//        //chess.next();
+//        chess.printBoardReadable();
+//        //==============================================
+//
+//    }
 }

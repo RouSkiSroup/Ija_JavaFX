@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 public class Chess {
-    private Board board;
+    public Board board; //TODO make private
     private List<OneMove> moves;
     private Queue<UniversalFigure> figureQueue = new LinkedList<>();
     private int counter;
