@@ -17,8 +17,10 @@ import java.util.Scanner;
 public class Controller implements Initializable {
 
     public TextArea NotationList;
-    public Button first;
     public ImageView testovaci;
+    public Button next;
+    public Button previous;
+    public Button auto;
 
     Board board = new Board(8);
     Chess chess = new Chess(board);
@@ -42,6 +44,15 @@ public class Controller implements Initializable {
 
     public void startTest(ActionEvent actionEvent) {
 
+    }
+
+    public void previousMove(ActionEvent actionEvent) {
+    }
+
+    public void nextMove(ActionEvent actionEvent) {
+    }
+
+    public void autoMove(ActionEvent actionEvent) {
     }
 }
 
