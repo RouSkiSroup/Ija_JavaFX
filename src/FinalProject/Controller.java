@@ -119,7 +119,7 @@ public class Controller implements Initializable {
         //testlab.setText(bod.getId());
 
         //testlab.setText(chess.board.board[0][0].getFigure().getType().name());
-        chess.parseNotations("./input.txt");
+        chess.loadFile("./input.txt");
         fillBoard();
 
     }
@@ -132,7 +132,7 @@ public class Controller implements Initializable {
     }
 
     public void nextMove(ActionEvent actionEvent) {
-        chess.nextMove();
+        chess.performMove();
         this.fillBoard();
     }
 
@@ -309,8 +309,6 @@ public class Controller implements Initializable {
         }
         return null;
     }
-
-
 
     private Node getNodeFromGridPane2(GridPane gridPane, int col, int row) {
         for (Node node : gridPane.getChildren()) {

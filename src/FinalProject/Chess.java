@@ -63,15 +63,26 @@ public class Chess {
         return moves;
     }
 
-    public int getCounter() {
-        return counter;
+    // TODO - check if move won't cause check, if yes, it's not allowed.
+    // TODO - check if opponent is checked after move, if yes, set a check flag to true.
+
+    void loadFile(String file) {
+        ParseNotations parser = new ParseNotations();
+        this.moves = parser.parseFile(file);
     }
 
-    public void setCounter(int counter) {
-        this.counter = counter;
+    void performMove() {
+        System.out.println("Tah cislo " + (counter + 1));
+        // TODO - check if game isn't paused and call manualMove() in advance
+        automaticMove(this.moves.get(counter));
+        counter += 1;
     }
 
-    // Call this when moves are performed automatically.
+    /**
+     * Performs and automatic move of figure according to input from notation.
+     * @param move  Move loaded from the notation.
+     * @return      Success of this operation.
+     */
     public boolean automaticMove(OneMove move) {
         UniversalFigure figure = getFigureFromNotation(move);
         BoardField field = getFieldFromNotation(move);
@@ -89,6 +100,40 @@ public class Chess {
         }
     }
 
+    /**
+     * Performs a manual move of figure defined by user.
+     * @param figure    Figure that is going to be moved.
+     * @param field     Field the figure is going to be moved to.
+     * @return          Success of this operation.
+     */
+    public boolean manualMove(UniversalFigure figure, BoardField field) {
+        if(figure.canMove(field)){
+            int index = this.counter;
+            while(index < this.moves.size()) {  // Rest of the array is always moved, so the index stays same.
+                this.moves.remove(index);
+            }
+            OneMove move = new OneMove(index % 2 == 0, figure.getType(),
+                    figure.getBoardField().getCol(), figure.getBoardField().getRow(),
+                    field.getCol(), field.getRow(),null, null);
+            moves.add(move);
+            moveFigure(figure, field);
+            UniversalFigure newFigure = promote(figure, move);
+            if(newFigure != null){
+                field.setFigure(newFigure);
+            }
+            checkCheck();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
+     * Gets the right figure mentioned in notation of moves.
+     * @param move  Move it is getting the figure from.
+     * @return      Right figure from notation.
+     */
     private UniversalFigure getFigureFromNotation(OneMove move) {
         ArrayList<UniversalFigure> figures = board.getFiguresOfType(move.getFigure(), move.getWhitePlayer());
         for(UniversalFigure figure: figures) {
@@ -98,9 +143,61 @@ public class Chess {
                     return figure;
                 }
             }
-            else {
-                System.err.println("Figura se nemuze pohnout na zadane misto.");
-                System.exit(1);
+        }
+        System.err.println("Figura se nemuze pohnout na zadane misto.");
+        System.exit(1);
+        return null;
+    }
+
+    private BoardField getFieldFromNotation(OneMove move) {
+        return this.board.getField(move.getDestinationCol(), move.getDestinationRow());
+    }
+
+    private void moveFigure(UniversalFigure figure, BoardField field) {
+        figure.getBoardField().setFigure(null);
+        figure.setBoardField(field);
+        field.setFigure(figure);
+    }
+
+    private UniversalFigure promote(UniversalFigure pawn, OneMove move) {
+        if(pawn.getBoardField().getRow() == 0 || pawn.getBoardField().getRow() == 7) {
+            if(move.getPromotion() == null) {
+                move.setPromotion(getPromotionDecision());
+            }
+            FigureType type = move.getPromotion();
+            return createNewFigure(pawn, type);
+        }
+        return null;
+    }
+
+    /**
+     * Obtains the figure type user wants his pawn to be promoted to.
+     * @return  Figure type of promoted figure.
+     */
+    private FigureType getPromotionDecision() {
+        // TODO - get the figure type from user.
+        return FigureType.D;
+    }
+
+    private UniversalFigure createNewFigure(UniversalFigure oldFigure, FigureType type) {
+        UniversalFigure newFigure;
+        // No need to control the type - notation is controlled and user can only choose correct option.
+        switch (type) {
+            case D: {
+                newFigure = new Queen(oldFigure.getBoardField(), oldFigure.isWhite());
+                return newFigure;
+            }
+            case V: {
+                newFigure = new Rook(oldFigure.getBoardField(), oldFigure.isWhite());
+                return newFigure;
+            }
+            case S: {
+                newFigure = new Bishop(oldFigure.getBoardField(), oldFigure.isWhite());
+                return newFigure;
+            }
+            case J: {
+                newFigure = new Knight(oldFigure.getBoardField(), oldFigure.isWhite());
+                return newFigure;
             }
         }
         return null;
@@ -132,82 +229,6 @@ public class Chess {
         return false;
     }
 
-    private BoardField getFieldFromNotation(OneMove move) {
-        return this.board.getField(move.getDestinationCol(), move.getDestinationRow());
-    }
-
-    // Call this when player moves figure manually.
-    public boolean manualMove(UniversalFigure figure, BoardField field) {
-        if(figure.canMove(field)){
-            int index = this.moves.size();   // TODO - nebude se pocitat jako konec pole, ale podle aktualni pozice v pruchodu notaci
-            // TODO - smazat nasledujici notaci
-            OneMove move = new OneMove(index % 2 == 0, figure.getType(),
-                    figure.getBoardField().getCol(), figure.getBoardField().getRow(),
-                    field.getCol(), field.getRow(),null, null);
-            moves.add(move);
-            moveFigure(figure, field);
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    private void moveFigure(UniversalFigure figure, BoardField field) {
-        figure.getBoardField().setFigure(null);
-        figure.setBoardField(field);
-        field.setFigure(figure);
-    }
-
-    public void nextMove() {
-        System.out.println("Tah cislo " + (counter + 1));
-        automaticMove(this.moves.get(counter));
-        counter += 1;
-    }
-
-    private void manualChange(UniversalFigure actPawn) {
-        if(actPawn.getBoardField().getRow() == 0 || actPawn.getBoardField().getRow() == 7){
-            //otevre se nejakej formular pro volbu premeny pesce
-            FigureType type = FigureType.D;
-            //createNewFigure(type);
-
-        }
-    }
-
-    private UniversalFigure promote(UniversalFigure pawn, OneMove move) {
-        if(pawn.getBoardField().getRow() == 0 || pawn.getBoardField().getRow() == 7) {
-            if(move.getPromotion() != null) {
-                FigureType type = move.getPromotion();
-                return createNewFigure(pawn, type);
-            }
-        }
-        return null;
-    }
-
-    private UniversalFigure createNewFigure(UniversalFigure oldFigure, FigureType type) {
-        UniversalFigure newFigure;
-        // No need to control the type - notation is controlled and user can only choose correct option.
-        switch (type) {
-            case D: {
-                newFigure = new Queen(oldFigure.getBoardField(), oldFigure.isWhite());
-                return newFigure;
-            }
-            case V: {
-                newFigure = new Rook(oldFigure.getBoardField(), oldFigure.isWhite());
-                return newFigure;
-            }
-            case S: {
-                newFigure = new Bishop(oldFigure.getBoardField(), oldFigure.isWhite());
-                return newFigure;
-            }
-            case J: {
-                newFigure = new Knight(oldFigure.getBoardField(), oldFigure.isWhite());
-                return newFigure;
-            }
-        }
-        return null;
-    }
-
     public void restartGame() {
         Queue<UniversalFigure> tmp = new LinkedList<>(this.figureQueue);
 
@@ -230,20 +251,6 @@ public class Chess {
     }
 
     public void printBoard() {
-        for(int i = 0; i < this.board.getSize(); i++){
-            for(int j = 0; j < this.board.getSize(); j++){
-                if (this.board.getBoard()[i][j].getFigure() == null){
-                    System.out.println("null");
-                }
-                else{
-                    this.board.getBoard()[i][j].getFigure().printState();
-                }
-            }
-            System.out.println();
-        }
-    }
-
-    public void printBoardReadable() {
         System.out.println();
         for(int i = 0; i < this.board.getSize(); i++){
             System.out.print(ANSI_GREEN + (8-i) + ANSI_RESET + " ");
@@ -267,19 +274,6 @@ public class Chess {
         }
         System.out.println();
         System.out.println();
-
-
-    }
-
-    public void debugNotation() {
-        for(OneMove move: moves) {
-            move.print();
-        }
-    }
-
-    void parseNotations(String file) {
-        ParseNotations parser = new ParseNotations();
-        this.moves = parser.parseFile(file);
     }
 
     //user-friendly variant of printNotation
@@ -296,12 +290,6 @@ public class Chess {
                 index += 1;
             }
             System.out.println(output);
-        }
-    }
-
-    public void clearListFrom(int pos) {
-        for(int i = pos; i < moves.size(); i++){
-            moves.set(i,null);
         }
     }
 }

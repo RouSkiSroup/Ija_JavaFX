@@ -4,14 +4,14 @@ import FinalProject.common.FigureType;
 import FinalProject.common.SpecialState;
 
 public class OneMove {
-    boolean white_player;
-    FigureType figure;
-    int source_col;         // In range 0-7.
-    int source_row;         // In range 0-7.
-    int destination_col;    // In range 0-7.
-    int destination_row;    // In range 0-7.
-    FigureType promotion;
-    SpecialState special;
+    private boolean white_player;
+    private FigureType figure;
+    private int source_col;         // In range 0-7.
+    private int source_row;         // In range 0-7.
+    private int destination_col;    // In range 0-7.
+    private int destination_row;    // In range 0-7.
+    private FigureType promotion;
+    private SpecialState special;
 
     public OneMove(boolean white_player, FigureType figure, int source_col, int source_row,
                    int destination_col, int destination_row, FigureType change, SpecialState special) {

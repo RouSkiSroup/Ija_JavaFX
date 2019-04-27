@@ -25,34 +25,12 @@ public class Game extends Application {
 //            System.exit(1);
 //        }
 //
-//        //System.out.println(args[0]);
-//
-//        chess.printBoardReadable();
-//
-//        chess.parseNotations(args[0]);
-//        //chess.debugNotation();
-//        //chess.clearListFrom(1);
-//        //chess.debugNotation();
+//        chess.printBoard();
+//        chess.loadFile(args[0]);
 //        chess.printNotation();
-//
-//        //chess.debugNotation();
-//
-//        //chess.next();
-//
-//        //chess.board.board[0][0].setFigure(null);
-//
-//        //chess.printBoardReadable();
-//
 //        for(int i = 0; i < chess.getMoves().size(); i ++){
-//            chess.nextMove();
+//            chess.performMove();
 //        }
-//        //chess.next();
-//        //chess.printBoardReadable();
-//        //chess.next();
-//        //chess.printBoardReadable();
-//        //chess.next();
 //        chess.printBoardReadable();
-//        //==============================================
-//
 //    }
 }

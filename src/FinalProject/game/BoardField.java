@@ -37,12 +37,6 @@ public class BoardField {
     public boolean isEmpty() {
         return this.figure == null;
     }
-
-    public String getLocation(){
-        String ret = String.valueOf((char)(row + 64));
-        ret = ret + (col + 1);
-        return ret;
-    }
 }
 
 
