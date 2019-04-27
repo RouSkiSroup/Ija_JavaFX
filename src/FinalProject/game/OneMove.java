@@ -1,15 +1,10 @@
 package FinalProject.game;
 
 import FinalProject.common.FigureType;
-import FinalProject.common.NotationType;
 import FinalProject.common.SpecialState;
-import FinalProject.common.UniversalFigure;
-
-import java.lang.reflect.Field;
 
 public class OneMove {
     boolean white_player;
-    // NotationType type;
     FigureType figure;
     int source_col;         // In range 0-7.
     int source_row;         // In range 0-7.

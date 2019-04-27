@@ -1,11 +1,9 @@
 package FinalProject;
 
 import FinalProject.common.FigureType;
-import FinalProject.common.NotationType;
 import FinalProject.common.UniversalFigure;
 import FinalProject.game.*;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 public class Chess {
@@ -281,7 +279,7 @@ public class Chess {
 
     void parseNotations(String file) {
         ParseNotations parser = new ParseNotations();
-        this.moves = parser.parse(file);
+        this.moves = parser.parseFile(file);
     }
 
     //user-friendly variant of printNotation
