@@ -123,9 +123,7 @@ public class Controller implements Initializable {
 //        }
         chess.loadFile("./input.txt");
 
-        for (int i = 0; i < chess.getMoves().size(); i++){
-            notationList2.getItems().addAll(chess.getMoves().get(i).printOnRow());
-        }
+        relodNotation();
 
 
         //Node bod = getNodeFromGridPane( 1, 1, grid);
@@ -411,8 +409,15 @@ public class Controller implements Initializable {
         row = grid.getColumnIndex(source.getParent());
         col = 9 - grid.getRowIndex(source.getParent());
         //have to call with swapped col and row because of different JavaFX col and row
-        //this.chess.buildMove(row, col);
+        this.chess.buildMove(row, col);
 
+    }
+
+    public void relodNotation(){
+        notationList2.getItems().clear();
+        for (int i = 0; i < chess.getMoves().size(); i++){
+            notationList2.getItems().addAll(chess.getMoves().get(i).printOnRow());
+        }
     }
 }
 
