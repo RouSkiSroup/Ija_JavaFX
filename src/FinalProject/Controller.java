@@ -27,7 +27,6 @@ public class Controller implements Initializable {
     public Button next;
     public Button previous;
     public Button auto;
-    public Label testlab;
     public GridPane grid;
     public ImageView fA1;
     public ImageView fB1;
@@ -110,32 +109,7 @@ public class Controller implements Initializable {
         this.stop = false;
         this.sleepTime = 0;
 
-        this.task = new TimerTask()
-        {
-            public void run()
-            {
-                if (chess.performMove()){
-                    ImageView view;
-                    File file;
-                    Image image;
-                    String imagePath;
-                    for (int i = 1; i < 9; i ++){
-                        for (int j = 1; j < 9; j ++){
-                            view = getViewByIndex(i,j);
-                            imagePath = getFigureImage(chess.board.board[i-1][j-1].getFigure());
-                            file = new File(imagePath);
-                            image = new Image(file.toURI().toString());
-                            view.setImage(image);
-                        }
-                    }
-                }
-                else{
-                    return;
-                }
 
-            }
-
-        };
         
 
 //        try {
@@ -182,6 +156,35 @@ public class Controller implements Initializable {
     }
 
     public void autoMove(ActionEvent actionEvent) {
+        this.task = new TimerTask()
+        {
+            public void run()
+            {
+                if (chess.performMove()){
+                    notationList2.getSelectionModel().select(chess.getCounter()-1);
+                    ImageView view;
+                    File file;
+                    Image image;
+                    String imagePath;
+                    for (int i = 1; i < 9; i ++){
+                        for (int j = 1; j < 9; j ++){
+                            view = getViewByIndex(i,j);
+                            imagePath = getFigureImage(chess.board.board[i-1][j-1].getFigure());
+                            file = new File(imagePath);
+                            image = new Image(file.toURI().toString());
+                            view.setImage(image);
+                        }
+                    }
+                }
+                else{
+                    timer.cancel();
+                    timer.purge();
+                    return;
+                }
+
+            }
+
+        };
         this.sleepTime = Integer.parseInt(sleepTm.getText());
         this.timer = new Timer();
         this.timer.schedule(this.task, 0, this.sleepTime * 1000);
@@ -399,6 +402,17 @@ public class Controller implements Initializable {
         this.chess.setCounter(index);
         this.chess.positionMove(this.chess.getCounter());
         this.fillBoard();
+    }
+
+    public void selectField(MouseEvent mouseEvent) {
+        int col;
+        int row;
+        Node source = (Node)mouseEvent.getSource();
+        row = grid.getColumnIndex(source.getParent());
+        col = 9 - grid.getRowIndex(source.getParent());
+        //have to call with swapped col and row because of different JavaFX col and row
+        //this.chess.buildMove(row, col);
+
     }
 }
 
