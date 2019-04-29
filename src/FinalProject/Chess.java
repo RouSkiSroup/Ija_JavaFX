@@ -11,6 +11,7 @@ public class Chess {
     private List<OneMove> moves;
     private Queue<UniversalFigure> figureQueue = new LinkedList<>();
     private int counter;
+    private OneMove manualMove;
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -26,6 +27,8 @@ public class Chess {
         this.moves = new ArrayList<>();
         this.board = board;
         this.counter = 0;
+        manualMove = new OneMove(false,null,-1, -1, false,
+                -1, -1, null, null);
         this.board.getBoard()[0][0].setFigure(new Rook(this.board.getBoard()[0][0], true));
         this.board.getBoard()[7][0].setFigure(new Rook(this.board.getBoard()[7][0], true));
         this.board.getBoard()[0][7].setFigure(new Rook(this.board.getBoard()[0][7], false));
@@ -71,11 +74,24 @@ public class Chess {
         this.moves = parser.parseFile(file);
     }
 
+    /**
+     * Performs move of figure.
+     * @return  Success of this operation.
+     */
     boolean performMove() {
         if (counter < this.getMoves().size()){
             System.out.println("Tah cislo " + (counter + 1));
-            // TODO - check if game isn't paused and call manualMove() in advance
-            automaticMove(this.moves.get(counter));
+            UniversalFigure figure = getFigureFromNotation(this.moves.get(counter));
+            BoardField field = getFieldFromNotation(this.moves.get(counter));
+            if(figure == null){
+                return false;
+            }
+            moveFigure(figure, field);
+            UniversalFigure newFigure = promote(figure, this.moves.get(counter));
+            if(newFigure != null) {
+                field.setFigure(newFigure);
+            }
+            checkCheck();
             counter += 1;
             return true;
         }
@@ -90,57 +106,6 @@ public class Chess {
         this.counter = 0;
         while(this.counter < pos){
             performMove();
-        }
-    }
-
-    /**
-     * Performs and automatic move of figure according to input from notation.
-     * @param move  Move loaded from the notation.
-     * @return      Success of this operation.
-     */
-    public boolean automaticMove(OneMove move) {
-        UniversalFigure figure = getFigureFromNotation(move);
-        BoardField field = getFieldFromNotation(move);
-        if(figure != null){
-            moveFigure(figure, field);
-            UniversalFigure newFigure = promote(figure, move);
-            if(newFigure != null){
-                field.setFigure(newFigure);
-            }
-            checkCheck();
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    /**
-     * Performs a manual move of figure defined by user.
-     * @param figure    Figure that is going to be moved.
-     * @param field     Field the figure is going to be moved to.
-     * @return          Success of this operation.
-     */
-    public boolean manualMove(UniversalFigure figure, BoardField field) {
-        if(figure.canMove(field)){
-            int index = this.counter;
-            while(index < this.moves.size()) {  // Rest of the array is always moved, so the index stays same.
-                this.moves.remove(index);
-            }
-            OneMove move = new OneMove(index % 2 == 0, figure.getType(),
-                    figure.getBoardField().getCol(), figure.getBoardField().getRow(), false,
-                    field.getCol(), field.getRow(),null, null);
-            moves.add(move);
-            moveFigure(figure, field);
-            UniversalFigure newFigure = promote(figure, move);
-            if(newFigure != null){
-                field.setFigure(newFigure);
-            }
-            checkCheck();
-            return true;
-        }
-        else {
-            return false;
         }
     }
 
@@ -272,6 +237,33 @@ public class Chess {
 
     public void setCounter(int c){
         this.counter = c;
+    }
+
+    public void buildMove(int col, int row) {
+        if(manualMove.getSourceCol() == -1 && manualMove.getSourceRow() == -1) {
+            manualMove.setWhitePlayer(this.counter % 2 == 0);
+            manualMove.setFigure(this.board.getField(col, row).getFigure().getType());
+            manualMove.setSourceCol(col-1);
+            manualMove.setSourceRow(row-1);
+        }
+        else if(manualMove.getDestinationCol() == -1 && manualMove.getDestinationRow() == -1) {
+            manualMove.setDestinationCol(col-1);
+            manualMove.setDestinationRow(row-1);
+            manualMove.setCapture(this.board.getField(col, row).getFigure() != null);
+            // TODO - set promotion
+            // TODO - set special
+
+            while(this.counter < this.moves.size()) {  // Rest of the array is always moved, so the index stays same.
+                this.moves.remove(this.counter);
+            }
+            this.moves.add(manualMove);
+
+            manualMove.clearMove();
+        }
+        else {
+            System.err.println("ERROR: Vnitrni chyba vytvareni pohybu buildMove()!");
+            System.exit(1);
+        }
     }
 
     public void printBoard() {
