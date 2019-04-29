@@ -71,11 +71,26 @@ public class Chess {
         this.moves = parser.parseFile(file);
     }
 
-    void performMove() {
-        System.out.println("Tah cislo " + (counter + 1));
-        // TODO - check if game isn't paused and call manualMove() in advance
-        automaticMove(this.moves.get(counter));
-        counter += 1;
+    boolean performMove() {
+        if (counter < this.getMoves().size()){
+            System.out.println("Tah cislo " + (counter + 1));
+            // TODO - check if game isn't paused and call manualMove() in advance
+            automaticMove(this.moves.get(counter));
+            counter += 1;
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    //Performs pos moves from start on the game
+    public void positionMove(int pos){
+        this.restartGame();
+        this.counter = 0;
+        while(this.counter < pos){
+            performMove();
+        }
     }
 
     /**
@@ -248,6 +263,14 @@ public class Chess {
                 }
             }
         }
+    }
+
+    public int getCounter(){
+        return this.counter;
+    }
+
+    public void setCounter(int c){
+        this.counter = c;
     }
 
     public void printBoard() {

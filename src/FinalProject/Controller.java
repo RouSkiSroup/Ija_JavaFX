@@ -6,11 +6,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 import java.io.File;
@@ -18,6 +17,7 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Controller implements Initializable {
 
@@ -91,19 +91,27 @@ public class Controller implements Initializable {
     public ImageView fD1;
     public ImageView fE6;
     public ImageView fD5;
+    public TextField sleepTm;
+    public ListView notationList2;
 
     Board board;
     Chess chess;
+    boolean stop;
+    int sleepTime;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.board = new Board(8);
         this.chess = new Chess(board);
+        this.stop = false;
+        this.sleepTime = 0;
+        
 
         try {
             Scanner s = new Scanner(new File("./input.txt")).useDelimiter("\\n+");
             while (s.hasNext()) {
-                NotationList.appendText(s.next() + "\n"); // else read the next token
+                //NotationList.appendText(s.next() + "\n"); // else read the next token
+                notationList2.getItems().addAll(s.next());
             }
         } catch (FileNotFoundException ex) {
             System.err.println(ex);
@@ -122,13 +130,13 @@ public class Controller implements Initializable {
         chess.loadFile("./input.txt");
         fillBoard();
 
-    }
 
-    public void startTest(ActionEvent actionEvent) {
 
     }
 
     public void previousMove(ActionEvent actionEvent) {
+        this.chess.positionMove(this.chess.getCounter()-1);
+        this.fillBoard();
     }
 
     public void nextMove(ActionEvent actionEvent) {
@@ -136,11 +144,44 @@ public class Controller implements Initializable {
         this.fillBoard();
     }
 
+    public void oneMove(){
+        if (chess.performMove()){
+            System.out.println(sleepTime);
+            this.fillBoard();
+            try
+            {
+                Thread.sleep(this.sleepTime * 1000);
+            }
+            catch(InterruptedException ex)
+            {
+                Thread.currentThread().interrupt();
+            }
+            if(stop){
+                this.stop = false;
+                return;
+            }
+            else{
+                this.oneMove();
+                return;
+            }
+        }
+        else{
+            return;
+        }
+    }
+
     public void autoMove(ActionEvent actionEvent) {
+        this.sleepTime = Integer.parseInt(sleepTm.getText());
+        this.oneMove();
+    }
+
+    public void stopMove(ActionEvent actionEvent) {
+        this.stop = true;
     }
 
     public void fillBoard(){
         ImageView view;
+        System.out.println("Neco");
         File file;
         Image image;
         String imagePath;
@@ -339,6 +380,13 @@ public class Controller implements Initializable {
         }
 
         return result;
+    }
+
+    public void setMove(MouseEvent mouseEvent) {
+        int index = notationList2.getSelectionModel().getSelectedIndex();
+        this.chess.setCounter(index);
+        this.chess.positionMove(this.chess.getCounter());
+        this.fillBoard();
     }
 }
 
