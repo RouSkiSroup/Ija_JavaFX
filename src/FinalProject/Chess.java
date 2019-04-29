@@ -240,16 +240,18 @@ public class Chess {
     }
 
     public void buildMove(int col, int row) {
+        col -= 1;
+        row -= 1;
         if(manualMove.getSourceCol() == -1 && manualMove.getSourceRow() == -1) {
             manualMove.setWhitePlayer(this.counter % 2 == 0);
             manualMove.setFigure(this.board.getField(col, row).getFigure().getType());
-            manualMove.setSourceCol(col-1);
-            manualMove.setSourceRow(row-1);
+            manualMove.setSourceCol(col);
+            manualMove.setSourceRow(row);
         }
         else if(manualMove.getDestinationCol() == -1 && manualMove.getDestinationRow() == -1) {
-            manualMove.setDestinationCol(col-1);
-            manualMove.setDestinationRow(row-1);
             manualMove.setCapture(this.board.getField(col, row).getFigure() != null);
+            manualMove.setDestinationCol(col);
+            manualMove.setDestinationRow(row);
             // TODO - set promotion
             // TODO - set special
 
