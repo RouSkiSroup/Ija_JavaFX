@@ -31,6 +31,10 @@ public class OneMove {
         return white_player;
     }
 
+    public void setWhitePlayer(boolean white_player) {
+        this.white_player = white_player;
+    }
+
     public FigureType getFigure() {
         return figure;
     }
@@ -117,6 +121,18 @@ public class OneMove {
 
     public void setSpecial(SpecialState special) {
         this.special = special;
+    }
+
+    public void clearMove() {
+        this.white_player = false;
+        this.figure = null;
+        this.source_col = -1;
+        this.source_row = -1;
+        this.capture = false;
+        this.destination_col = -1;
+        this.destination_row = -1;
+        this.promotion = null;
+        this.special = null;
     }
 
     public void print() {
