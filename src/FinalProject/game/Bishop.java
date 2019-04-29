@@ -18,24 +18,16 @@ public class Bishop extends UniversalFigure {
 
         // Checks if there are any figures in the way.
         if(destination.getCol() > source.getCol() && destination.getRow() > source.getRow()) {
-            return checkWay(source.getCol(), source.getRow(),
-                    destination.getCol(), destination.getRow(),
-                    1, 1);
+            return checkWayUR(source.getCol(), source.getRow(), destination.getCol(), destination.getRow());
         }
         else if(destination.getCol() > source.getCol() && destination.getRow() < source.getRow()) {
-            return checkWay(source.getCol(), destination.getRow()-1,
-                    destination.getCol(), source.getRow()-1,
-                    1, 1);
+            return checkWayDR(source.getCol(), source.getRow(), destination.getCol(), destination.getRow());
         }
         else if(destination.getCol() < source.getCol() && destination.getRow() < source.getRow()) {
-            return checkWay(destination.getCol()-1, destination.getRow()-1,
-                    source.getCol()-1, source.getRow()-1,
-                    1, 1);
+            return checkWayDL(source.getCol(), source.getRow(), destination.getCol(), destination.getRow());
         }
         else if(destination.getCol() < source.getCol() && destination.getRow() > source.getRow()) {
-            return checkWay(destination.getCol()-1, source.getRow(),
-                    source.getCol()-1, destination.getRow(),
-                    1, 1);
+            return checkWayUL(source.getCol(), source.getRow(), destination.getCol(), destination.getRow());
         }
         else {
             return false;

@@ -74,8 +74,9 @@ public class Chess {
      * @return  Success of this operation.
      */
     boolean performMove() {
-        if (counter < getMoves().size()){
+        if(counter < getMoves().size()){
             System.out.println("Tah cislo " + (counter + 1));
+
             UniversalFigure figure = getFigureFromNotation(this.moves.get(counter));
             BoardField field = this.board.getField(
                     this.moves.get(this.counter).getDestinationCol(),
@@ -88,7 +89,7 @@ public class Chess {
 
             if(checkCheck(this.counter % 2 != 0)) {
                 System.out.println("Nepovoleny tah - zpusobi sach od soupere.");
-                positionMove(this.counter - 1);
+                positionMove(this.counter);
                 return false;
             }
 
@@ -97,14 +98,19 @@ public class Chess {
                 field.setFigure(newFigure);
             }
 
-            if(checkCheck(counter % 2 == 0)) {
+            if(checkCheck(this.counter % 2 == 0)) {
                 this.check = true;
+                if(checkCheckmate(this.counter % 2 != 0)) {
+                    System.out.println("Konec hry - mat.");
+                    // TODO - exit the game.
+                    return false;
+                }
             }
 
             counter += 1;
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
@@ -209,6 +215,28 @@ public class Chess {
             }
         }
         return false;
+    }
+
+    /**
+     *
+     * @param isWhitesMove
+     * @return
+     */
+    private boolean checkCheckmate(boolean isWhitesMove) {
+        if(!this.check) {
+            return false;
+        }
+        ArrayList<UniversalFigure> figures = this.board.getFiguresOfPlayer(!isWhitesMove);
+        ArrayList<BoardField> fields = this.board.getSurroundingFields(
+                this.board.getKingOfPlayer(isWhitesMove).getBoardField());
+        for(UniversalFigure figure: figures) {
+            for(BoardField field: fields) {
+                if(!figure.canMove(field)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public void restartGame() {

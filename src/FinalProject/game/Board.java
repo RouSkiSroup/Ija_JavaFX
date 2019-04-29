@@ -75,4 +75,33 @@ public class Board {
         }
         return figures;
     }
+
+    public ArrayList<BoardField> getSurroundingFields(BoardField field) {
+        ArrayList<BoardField> fields = new ArrayList<>();
+        if(field.getCol() > 0) {
+            fields.add(getField(field.getCol()-1, field.getRow()));
+        }
+        if(field.getCol() > 0 && field.getRow() > 0) {
+            fields.add(getField(field.getCol()-1, field.getRow()-1));
+        }
+        if(field.getCol() < 7) {
+            fields.add(getField(field.getCol()+1, field.getRow()));
+        }
+        if(field.getCol() < 7 && field.getRow() > 0) {
+            fields.add(getField(field.getCol()+1, field.getRow()-1));
+        }
+        if(field.getRow() > 0) {
+            fields.add(getField(field.getCol(), field.getRow()-1));
+        }
+        if(field.getCol() < 7 && field.getRow() < 7) {
+            fields.add(getField(field.getCol()+1, field.getRow()+1));
+        }
+        if(field.getRow() < 7) {
+            fields.add(getField(field.getCol(), field.getRow()+1));
+        }
+        if(field.getCol() > 0 && field.getRow() < 7) {
+            fields.add(getField(field.getCol()-1, field.getRow()+1));
+        }
+        return fields;
+    }
 }
