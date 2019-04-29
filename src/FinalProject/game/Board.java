@@ -35,18 +35,17 @@ public class Board {
         return 0;
     }
 
-    public ArrayList<UniversalFigure> getFiguresOfType(FigureType type, boolean white_player) {
-        ArrayList<UniversalFigure> figures = new ArrayList<>();
+    public UniversalFigure getKingOfPlayer(boolean white_player) {
         for(BoardField[] col: this.board) {
             for(BoardField field: col) {
                 if(field.getFigure() != null){
-                    if(field.getFigure().getType() == type && field.getFigure().isWhite() == white_player) {
-                        figures.add(field.getFigure());
+                    if(field.getFigure().getType() == FigureType.K && field.getFigure().isWhite() == white_player) {
+                        return field.getFigure();
                     }
                 }
             }
         }
-        return figures;
+        return null;
     }
 
     public ArrayList<UniversalFigure> getFiguresOfPlayer(boolean white_player) {
@@ -55,6 +54,20 @@ public class Board {
             for(BoardField field: col) {
                 if(field.getFigure() != null){
                     if(field.getFigure().isWhite() == white_player) {
+                        figures.add(field.getFigure());
+                    }
+                }
+            }
+        }
+        return figures;
+    }
+
+    public ArrayList<UniversalFigure> getFiguresOfTypeAndPlayer(FigureType type, boolean white_player) {
+        ArrayList<UniversalFigure> figures = new ArrayList<>();
+        for(BoardField[] col: this.board) {
+            for(BoardField field: col) {
+                if(field.getFigure() != null){
+                    if(field.getFigure().getType() == type && field.getFigure().isWhite() == white_player) {
                         figures.add(field.getFigure());
                     }
                 }

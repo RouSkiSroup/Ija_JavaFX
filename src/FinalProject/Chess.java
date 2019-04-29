@@ -12,6 +12,7 @@ public class Chess {
     private Queue<UniversalFigure> figureQueue = new LinkedList<>();
     private int counter;
     private OneMove manualMove;
+    private boolean check;
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -66,38 +67,51 @@ public class Chess {
         return moves;
     }
 
-    // TODO - check if move won't cause check, if yes, it's not allowed.
     // TODO - check if opponent is checked after move, if yes, set a check flag to true.
-
-    void loadFile(String file) {
-        ParseNotations parser = new ParseNotations();
-        this.moves = parser.parseFile(file);
-    }
 
     /**
      * Performs move of figure.
      * @return  Success of this operation.
      */
     boolean performMove() {
-        if (counter < this.getMoves().size()){
+        if (counter < getMoves().size()){
             System.out.println("Tah cislo " + (counter + 1));
             UniversalFigure figure = getFigureFromNotation(this.moves.get(counter));
-            BoardField field = getFieldFromNotation(this.moves.get(counter));
+            BoardField field = this.board.getField(
+                    this.moves.get(this.counter).getDestinationCol(),
+                    this.moves.get(this.counter).getDestinationRow());
             if(figure == null){
                 return false;
             }
+
             moveFigure(figure, field);
+
+            if(checkCheck(this.counter % 2 != 0)) {
+                System.out.println("Nepovoleny tah - zpusobi sach od soupere.");
+                positionMove(this.counter - 1);
+                return false;
+            }
+
             UniversalFigure newFigure = promote(figure, this.moves.get(counter));
             if(newFigure != null) {
                 field.setFigure(newFigure);
             }
-            checkCheck();
+
+            if(checkCheck(counter % 2 == 0)) {
+                this.check = true;
+            }
+
             counter += 1;
             return true;
         }
         else{
             return false;
         }
+    }
+
+    void loadFile(String file) {
+        ParseNotations parser = new ParseNotations();
+        this.moves = parser.parseFile(file);
     }
 
     //Performs pos moves from start on the game
@@ -115,7 +129,7 @@ public class Chess {
      * @return      Right figure from notation.
      */
     private UniversalFigure getFigureFromNotation(OneMove move) {
-        ArrayList<UniversalFigure> figures = board.getFiguresOfType(move.getFigure(), move.getWhitePlayer());
+        ArrayList<UniversalFigure> figures = board.getFiguresOfTypeAndPlayer(move.getFigure(), move.getWhitePlayer());
         for(UniversalFigure figure: figures) {
             if(figure.canMove(board.getField(move.getDestinationCol(), move.getDestinationRow()))) {
                 if((move.getSourceCol() == -1 || move.getSourceCol() == figure.getBoardField().getCol()) &&
@@ -127,10 +141,6 @@ public class Chess {
         System.err.println("Figura se nemuze pohnout na zadane misto.");
         System.exit(1);
         return null;
-    }
-
-    private BoardField getFieldFromNotation(OneMove move) {
-        return this.board.getField(move.getDestinationCol(), move.getDestinationRow());
     }
 
     private void moveFigure(UniversalFigure figure, BoardField field) {
@@ -183,26 +193,18 @@ public class Chess {
         return null;
     }
 
-    private void checkCheck() {
-        ArrayList<UniversalFigure> whiteKing = this.board.getFiguresOfType(FigureType.K, true);
-        ArrayList<UniversalFigure> blackKing = this.board.getFiguresOfType(FigureType.K, false);
-        if (canAttackKing(whiteKing.get(0))){
-            System.out.println("Bilej je v sachu");
-        }
-        if (canAttackKing(blackKing.get(0))){
-            System.out.println("Cernej je v sachu");
-        }
-    }
+    /**
+     * Checks if opponent of player in argument is in check.
+     * @param isWhitesMove  Opponent of which player (not opponent).
+     * @return  If player opponent is in check.
+     */
+    private boolean checkCheck(boolean isWhitesMove) {
+        ArrayList<UniversalFigure> figures = this.board.getFiguresOfPlayer(isWhitesMove);
+        UniversalFigure king = this.board.getKingOfPlayer(!isWhitesMove);
+        BoardField kings_field = king.getBoardField();
 
-    private boolean canAttackKing(UniversalFigure king) {
-        ArrayList<UniversalFigure> figures = this.board.getFiguresOfPlayer(!king.isWhite());
-        BoardField kingField = king.getBoardField();
         for(UniversalFigure figure: figures) {
-            if(figure.canMove(kingField)) {
-                System.out.print("Kral kterej je v sachu: ");
-                king.printState();
-                System.out.print("Figurka, ktera ho sachuje: ");
-                figure.printState();
+            if(figure.canMove(kings_field)) {
                 return true;
             }
         }
@@ -239,7 +241,7 @@ public class Chess {
         this.counter = c;
     }
 
-    public void buildMove(int col, int row) {
+    void buildMove(int col, int row) {
         col -= 1;
         row -= 1;
         if(manualMove.getSourceCol() == -1 && manualMove.getSourceRow() == -1) {
