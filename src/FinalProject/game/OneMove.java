@@ -8,18 +8,19 @@ public class OneMove {
     private FigureType figure;
     private int source_col;         // In range 0-7.
     private int source_row;         // In range 0-7.
+    private boolean capture;
     private int destination_col;    // In range 0-7.
     private int destination_row;    // In range 0-7.
     private FigureType promotion;
     private SpecialState special;
 
-    public OneMove(boolean white_player, FigureType figure, int source_col, int source_row,
+    public OneMove(boolean white_player, FigureType figure, int source_col, int source_row, boolean capture,
                    int destination_col, int destination_row, FigureType change, SpecialState special) {
         this.white_player = white_player;
-        // this.type = type;
         this.figure = figure;
         this.source_col = source_col;
         this.source_row = source_row;
+        this.capture = capture;
         this.destination_col = destination_col;
         this.destination_row = destination_row;
         this.promotion = change;
@@ -64,6 +65,14 @@ public class OneMove {
             System.err.println("Nepovolene souradnice radku!");
             System.exit(1);
         }
+    }
+
+    public boolean getCapture() {
+        return this.capture;
+    }
+
+    public void setCapture(boolean capture) {
+        this.capture = capture;
     }
 
     public int getDestinationCol() {
@@ -144,7 +153,7 @@ public class OneMove {
     public String printOnRow() {
         String ret = "";
         if(this.figure != null) {
-            ret+= this.figure;
+            ret += this.figure.name();
         }
         if(this.source_col != -1) {
             ret += getColAsString(this.source_col);
@@ -159,10 +168,10 @@ public class OneMove {
             ret += getRowAsString(this.destination_row);
         }
         if(this.promotion != null) {
-            ret += this.promotion;
+            ret += this.promotion.name();
         }
         if(this.special != null) {
-            ret += this.special;
+            ret += this.special.name();     // TODO - change to special characters as in notation
         }
         return ret;
     }
