@@ -246,6 +246,7 @@ public class Chess {
 
     public void restartGame() {
         Queue<UniversalFigure> tmp = new LinkedList<>(this.figureQueue);
+        this.counter = 0;
 
         /* Zkratil jsem, ale nevim, jestli funguje, prijde mi, ze to nemuze fungovat, ani v puvodnim pripade, protoze ta fronta nebude naplnena.
         Queue<UniversalFigure> tmp = new LinkedList<>();

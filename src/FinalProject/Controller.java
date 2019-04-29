@@ -17,6 +17,8 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class Controller implements Initializable {
@@ -98,6 +100,8 @@ public class Controller implements Initializable {
     Chess chess;
     boolean stop;
     int sleepTime;
+    Timer timer;
+    TimerTask task;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -105,29 +109,56 @@ public class Controller implements Initializable {
         this.chess = new Chess(board);
         this.stop = false;
         this.sleepTime = 0;
+
+        this.task = new TimerTask()
+        {
+            public void run()
+            {
+                if (chess.performMove()){
+                    ImageView view;
+                    File file;
+                    Image image;
+                    String imagePath;
+                    for (int i = 1; i < 9; i ++){
+                        for (int j = 1; j < 9; j ++){
+                            view = getViewByIndex(i,j);
+                            imagePath = getFigureImage(chess.board.board[i-1][j-1].getFigure());
+                            file = new File(imagePath);
+                            image = new Image(file.toURI().toString());
+                            view.setImage(image);
+                        }
+                    }
+                }
+                else{
+                    return;
+                }
+
+            }
+
+        };
         
 
-        try {
-            Scanner s = new Scanner(new File("./input.txt")).useDelimiter("\\n+");
-            while (s.hasNext()) {
-                //NotationList.appendText(s.next() + "\n"); // else read the next token
-                notationList2.getItems().addAll(s.next());
-            }
-        } catch (FileNotFoundException ex) {
-            System.err.println(ex);
+//        try {
+//            Scanner s = new Scanner(new File("./input.txt")).useDelimiter("\\n+");
+//            while (s.hasNext()) {
+//                //NotationList.appendText(s.next() + "\n"); // else read the next token
+//                notationList2.getItems().addAll(s.next());
+//            }
+//        } catch (FileNotFoundException ex) {
+//            System.err.println(ex);
+//        }
+        chess.loadFile("./input.txt");
+
+        for (int i = 0; i < chess.getMoves().size(); i++){
+            notationList2.getItems().addAll(chess.getMoves().get(i).printOnRow());
         }
 
-        File file = new File("src/images/pb.png");
-        Image image = new Image(file.toURI().toString());
-        //testovaci.setImage(image);
-
-        testlab.setText("Textik");
 
         //Node bod = getNodeFromGridPane( 1, 1, grid);
         //testlab.setText(bod.getId());
 
         //testlab.setText(chess.board.board[0][0].getFigure().getType().name());
-        chess.loadFile("./input.txt");
+
         fillBoard();
 
 
@@ -137,51 +168,32 @@ public class Controller implements Initializable {
     public void previousMove(ActionEvent actionEvent) {
         this.chess.positionMove(this.chess.getCounter()-1);
         this.fillBoard();
+        this.updateNotationList();
     }
 
     public void nextMove(ActionEvent actionEvent) {
         chess.performMove();
         this.fillBoard();
+        this.updateNotationList();
     }
 
-    public void oneMove(){
-        if (chess.performMove()){
-            System.out.println(sleepTime);
-            this.fillBoard();
-            try
-            {
-                Thread.sleep(this.sleepTime * 1000);
-            }
-            catch(InterruptedException ex)
-            {
-                Thread.currentThread().interrupt();
-            }
-            if(stop){
-                this.stop = false;
-                return;
-            }
-            else{
-                this.oneMove();
-                return;
-            }
-        }
-        else{
-            return;
-        }
+    public void updateNotationList(){
+        this.notationList2.getSelectionModel().select(chess.getCounter()-1);
     }
 
     public void autoMove(ActionEvent actionEvent) {
         this.sleepTime = Integer.parseInt(sleepTm.getText());
-        this.oneMove();
+        this.timer = new Timer();
+        this.timer.schedule(this.task, 0, this.sleepTime * 1000);
     }
 
     public void stopMove(ActionEvent actionEvent) {
-        this.stop = true;
+        this.timer.cancel();
+        this.timer.purge();
     }
 
     public void fillBoard(){
         ImageView view;
-        System.out.println("Neco");
         File file;
         Image image;
         String imagePath;
@@ -383,7 +395,7 @@ public class Controller implements Initializable {
     }
 
     public void setMove(MouseEvent mouseEvent) {
-        int index = notationList2.getSelectionModel().getSelectedIndex();
+        int index = notationList2.getSelectionModel().getSelectedIndex()+1;
         this.chess.setCounter(index);
         this.chess.positionMove(this.chess.getCounter());
         this.fillBoard();
