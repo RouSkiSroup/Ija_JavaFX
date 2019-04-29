@@ -128,7 +128,7 @@ public class Chess {
                 this.moves.remove(index);
             }
             OneMove move = new OneMove(index % 2 == 0, figure.getType(),
-                    figure.getBoardField().getCol(), figure.getBoardField().getRow(),
+                    figure.getBoardField().getCol(), figure.getBoardField().getRow(), false,
                     field.getCol(), field.getRow(),null, null);
             moves.add(move);
             moveFigure(figure, field);

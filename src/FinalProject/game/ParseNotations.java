@@ -28,11 +28,13 @@ public class ParseNotations {
     }
 
     private OneMove parseMove(String moveAsString, boolean white_player) {
-        OneMove move = new OneMove(white_player,null,-1, -1,
+        OneMove move = new OneMove(white_player,null,-1, -1, false,
                 -1, -1, null, null);
         int res = parseFigureType(moveAsString, move);
         moveAsString = moveAsString.substring(res);
         res = parseDistinguish(moveAsString, move);
+        moveAsString = moveAsString.substring(res);
+        res = parseCapture(moveAsString, move);
         moveAsString = moveAsString.substring(res);
         res = parseLocations(moveAsString, move);
         moveAsString = moveAsString.substring(res);
@@ -66,6 +68,16 @@ public class ParseNotations {
         else if(Character.isDigit(line.charAt(0)) &&
                 Character.isLetter(line.charAt(1)) && Character.isLowerCase(line.charAt(1))) {
             move.setSourceRow(Character.getNumericValue(line.charAt(0)) - 1);
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    private int parseCapture(String line, OneMove move) {
+        if(line.charAt(0) == 'x') {
+            move.setCapture(true);
             return 1;
         }
         else {
