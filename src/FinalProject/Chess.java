@@ -272,6 +272,7 @@ public class Chess {
                 this.moves.remove(this.counter);
             }
             this.moves.add(new_move);
+            performMove();
         }
         else {
             System.err.println("ERROR: Vnitrni chyba vytvareni pohybu buildMove()!");
