@@ -255,12 +255,23 @@ public class Chess {
             // TODO - set promotion
             // TODO - set special
 
+            OneMove new_move = new OneMove(
+                    manualMove.getWhitePlayer(),
+                    manualMove.getFigure(),
+                    manualMove.getSourceCol(),
+                    manualMove.getSourceRow(),
+                    manualMove.getCapture(),
+                    manualMove.getDestinationCol(),
+                    manualMove.getDestinationRow(),
+                    manualMove.getPromotion(),
+                    manualMove.getSpecial());
+
+            manualMove.clearMove();
+
             while(this.counter < this.moves.size()) {  // Rest of the array is always moved, so the index stays same.
                 this.moves.remove(this.counter);
             }
-            this.moves.add(manualMove);
-
-            manualMove.clearMove();
+            this.moves.add(new_move);
         }
         else {
             System.err.println("ERROR: Vnitrni chyba vytvareni pohybu buildMove()!");
