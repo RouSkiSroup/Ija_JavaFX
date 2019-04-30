@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -32,6 +33,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class Controller implements Initializable {
 
+    public Pane sach;
+    public Pane pat;
     ObservableList<String> figureChoice = FXCollections.observableArrayList("Dáma","Věž","Střelec","Jezdec");
 
     public TextArea NotationList;
@@ -174,8 +177,12 @@ public class Controller implements Initializable {
     public void nextMove(ActionEvent actionEvent) {
         int tmp;
         if ((tmp = chess.performMove()) == 2){
-            System.out.println("Sach mat");
-        };
+            System.out.println("Okej");
+            sach.setVisible(true);
+        }
+        if ((tmp) == 3){
+            pat.setVisible(true);
+        }
         this.fillBoard();
         this.updateNotationList();
     }
@@ -217,8 +224,11 @@ public class Controller implements Initializable {
                 else{
                     timer.cancel();
                     timer.purge();
-                    if(tmp == 2){
-                        System.out.println("Sach mat.");
+                    if ((tmp) == 2){
+                        sach.setVisible(true);
+                    }
+                    if ((tmp) == 3){
+                        pat.setVisible(true);
                     }
                     return;
                 }
@@ -449,7 +459,14 @@ public class Controller implements Initializable {
         //have to call with swapped col and row because of different JavaFX col and row
         String promoteFigure = promoteChoice.getValue().toString();
         FigureType figure = strToFigureType(promoteFigure);
-        this.chess.buildMove(row, col, figure);
+        int tmp = this.chess.buildMove(row, col, figure);
+        if (tmp == 2){
+            System.out.println("Okej");
+            sach.setVisible(true);
+        }
+        if (tmp == 3){
+            pat.setVisible(true);
+        }
         this.fillBoard();
         reloadNotation();
 
@@ -515,6 +532,8 @@ public class Controller implements Initializable {
      * @param actionEvent   Variable signalizing button press.
      */
     public void restart(ActionEvent actionEvent) {
+        sach.setVisible(false);
+        pat.setVisible(false);
         chess.restartGame();
         updateNotationList();
         fillBoard();
