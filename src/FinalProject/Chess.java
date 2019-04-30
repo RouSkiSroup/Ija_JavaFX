@@ -78,6 +78,7 @@ public class Chess {
             System.out.println("Tah cislo " + (counter + 1));
 
             UniversalFigure figure = getFigureFromNotation(this.moves.get(counter));
+
             BoardField field = this.board.getField(
                     this.moves.get(this.counter).getDestinationCol(),
                     this.moves.get(this.counter).getDestinationRow());
@@ -144,8 +145,7 @@ public class Chess {
                 }
             }
         }
-        System.err.println("Figura se nemuze pohnout na zadane misto.");
-        System.exit(1);
+        System.out.println("Figura se nemuze pohnout na zadane misto.");
         return null;
     }
 

@@ -9,6 +9,11 @@ public class Rook extends UniversalFigure {
     }
 
     public boolean canMove(BoardField destination) {
+        if(!destination.isEmpty()){
+            if(destination.getFigure().isWhite() == this.isWhite()){
+                return false;
+            }
+        }
         BoardField source = this.getBoardField();
 
         // Checks if the destination is achievable and if there are any figures in the way.

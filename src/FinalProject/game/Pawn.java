@@ -9,6 +9,11 @@ public class Pawn extends UniversalFigure {
     }
 
     public boolean canMove(BoardField destination) {
+        if(!destination.isEmpty()){
+            if(destination.getFigure().isWhite() == this.isWhite()){
+                return false;
+            }
+        }
         BoardField source = this.getBoardField();
         // Move figure forward.
         if(destination.isEmpty()) {
