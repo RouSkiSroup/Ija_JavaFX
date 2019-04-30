@@ -514,6 +514,11 @@
             <TextField fx:id="sleepTm" layoutX="380.0" layoutY="785.0" prefHeight="25.0" prefWidth="30.0" text="1" />
             <Button layoutX="169.0" layoutY="822.0" mnemonicParsing="false" onAction="#stopMove" text="Stop" />
             <ListView fx:id="notationList2" layoutX="142.0" layoutY="124.0" onMouseClicked="#setMove" prefHeight="589.0" prefWidth="200.0" />
+            <Button layoutX="367.0" layoutY="74.0" mnemonicParsing="false" onAction="#loadNotation" text="Load notation" />
+            <Label fx:id="inputLab" layoutX="220.0" layoutY="68.0" maxWidth="130.0" />
+            <Label layoutX="146.0" layoutY="68.0" text="Soubor:" />
+            <Label layoutX="147.0" layoutY="93.0" text="Cesta:" />
+            <Label fx:id="inputLab2" layoutX="220.0" layoutY="92.0" maxWidth="130.0" />
          </children>
       </Pane>
    </children>

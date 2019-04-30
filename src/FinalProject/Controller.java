@@ -11,10 +11,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.Timer;
@@ -94,6 +96,9 @@ public class Controller implements Initializable {
     public ImageView fD5;
     public TextField sleepTm;
     public ListView notationList2;
+    public TextArea input;
+    public Label inputLab;
+    public Label inputLab2;
 
     Board board;
     Chess chess;
@@ -121,9 +126,7 @@ public class Controller implements Initializable {
 //        } catch (FileNotFoundException ex) {
 //            System.err.println(ex);
 //        }
-        chess.loadFile("./input.txt");
 
-        reloadNotation();
 
 
         //Node bod = getNodeFromGridPane( 1, 1, grid);
@@ -144,7 +147,10 @@ public class Controller implements Initializable {
     }
 
     public void nextMove(ActionEvent actionEvent) {
-        chess.performMove();
+        int tmp;
+        if ((tmp = chess.performMove()) == 2){
+            System.out.println("Sach mat");
+        };
         this.fillBoard();
         this.updateNotationList();
     }
@@ -154,11 +160,13 @@ public class Controller implements Initializable {
     }
 
     public void autoMove(ActionEvent actionEvent) {
+
         this.task = new TimerTask()
         {
             public void run()
             {
-                if (chess.performMove()){
+                int tmp;
+                if ((tmp = chess.performMove()) == 0){
                     notationList2.getSelectionModel().select(chess.getCounter()-1);
                     ImageView view;
                     File file;
@@ -177,6 +185,9 @@ public class Controller implements Initializable {
                 else{
                     timer.cancel();
                     timer.purge();
+                    if(tmp == 2){
+                        System.out.println("Sach mat.");
+                    }
                     return;
                 }
 
@@ -419,6 +430,25 @@ public class Controller implements Initializable {
         notationList2.getItems().clear();
         for (int i = 0; i < chess.getMoves().size(); i++){
             notationList2.getItems().addAll(chess.getMoves().get(i).printOnRow());
+        }
+    }
+
+    public void loadNotation(ActionEvent actionEvent) {
+        FileChooser fc = new FileChooser();
+        File selectedFile = fc.showOpenDialog(null);
+
+        if(selectedFile != null){
+            inputLab.setText(selectedFile.getName());
+            inputLab2.setText(selectedFile.getAbsolutePath());
+            this.chess.loadFile(selectedFile.getAbsolutePath());
+            this.chess.restartGame();
+            this.reloadNotation();
+            fillBoard();
+
+
+        }
+        else{
+            System.err.println("Soubor neni validni.");
         }
     }
 }
