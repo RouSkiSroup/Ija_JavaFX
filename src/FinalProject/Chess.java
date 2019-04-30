@@ -261,11 +261,10 @@ public class Chess {
         col -= 1;
         row -= 1;
 
-        if(this.board.getField(col, row).getFigure() == null) {
-            return;
-        }
-        
         if(manualMove.getSourceCol() == -1 && manualMove.getSourceRow() == -1) {
+            if(this.board.getField(col, row).getFigure() == null) {
+                return;
+            }
             manualMove.setWhitePlayer(this.counter % 2 == 0);
             manualMove.setFigure(this.board.getField(col, row).getFigure().getType());
             manualMove.setSourceCol(col);
