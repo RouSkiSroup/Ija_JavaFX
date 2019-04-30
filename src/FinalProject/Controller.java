@@ -28,7 +28,7 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
- *
+ *  Class controls GUI.
  */
 public class Controller implements Initializable {
 
@@ -118,6 +118,11 @@ public class Controller implements Initializable {
     Timer timer;
     TimerTask task;
 
+    /**
+     * Initialize GUI.
+     * @param location  Parameter for GUI initialize.
+     * @param resources Parameter for GUI initialize.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.board = new Board(8);
