@@ -1,7 +1,9 @@
 package FinalProject;
 
+import FinalProject.common.FigureType;
 import FinalProject.common.UniversalFigure;
 import FinalProject.game.Board;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -24,6 +26,8 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class Controller implements Initializable {
+
+    ObservableList<String> figureChoice = FXCollections.observableArrayList("Dama","Vez","Strelec","Jezdec","Pesec");
 
     public TextArea NotationList;
     public Button next;
@@ -99,6 +103,8 @@ public class Controller implements Initializable {
     public TextArea input;
     public Label inputLab;
     public Label inputLab2;
+    public Label lampicka;
+    public ChoiceBox promoteChoice;
 
     Board board;
     Chess chess;
@@ -114,8 +120,9 @@ public class Controller implements Initializable {
         this.stop = false;
         this.sleepTime = 0;
 
+        promoteChoice.setItems(figureChoice);
+        promoteChoice.setValue("Dama");
 
-        
 
 //        try {
 //            Scanner s = new Scanner(new File("./input.txt")).useDelimiter("\\n+");
@@ -420,7 +427,9 @@ public class Controller implements Initializable {
         row = grid.getColumnIndex(source.getParent());
         col = 9 - grid.getRowIndex(source.getParent());
         //have to call with swapped col and row because of different JavaFX col and row
-        this.chess.buildMove(row, col);
+        String promoteFigure = promoteChoice.getValue().toString();
+        FigureType figure = strToFigureType(promoteFigure);
+        this.chess.buildMove(row, col, figure);
         this.fillBoard();
         reloadNotation();
 
@@ -450,6 +459,26 @@ public class Controller implements Initializable {
         else{
             System.err.println("Soubor neni validni.");
         }
+    }
+
+    public FigureType strToFigureType(String string){
+        if (string.equals("Dama")){
+            return FigureType.D;
+        }
+        else if (string.equals("Vez")){
+            return FigureType.V;
+        }
+        else if (string.equals("Strelec")){
+            return FigureType.S;
+        }
+        else if (string.equals("Kun")){
+            return FigureType.K;
+        }
+        else if (string.equals("Pesec")) {
+            return FigureType.p;
+        }
+        System.err.println("Spatna hodnota v Figure promotion");
+        return FigureType.D;
     }
 }
 
