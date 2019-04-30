@@ -3,6 +3,9 @@ package FinalProject.game;
 import FinalProject.common.FigureType;
 import FinalProject.common.UniversalFigure;
 
+/**
+ * Class represents bishop figure.
+ */
 public class Bishop extends UniversalFigure {
     public Bishop(BoardField boardField, boolean white) {
         super(boardField, white, FigureType.S);
