@@ -3,6 +3,9 @@ package FinalProject.game;
 import FinalProject.common.FigureType;
 import FinalProject.common.SpecialState;
 
+/**
+ * Class representing one move with all the needed information.
+ */
 public class OneMove {
     private boolean white_player;
     private FigureType figure;
@@ -27,26 +30,44 @@ public class OneMove {
         this.special = special;
     }
 
+    /**
+     * @return  If player in move is white or not.
+     */
     public boolean getWhitePlayer() {
         return white_player;
     }
 
+    /**
+     * @param white_player If player in move is white or not.
+     */
     public void setWhitePlayer(boolean white_player) {
         this.white_player = white_player;
     }
 
+    /**
+     * @return Type of figure that is moved.
+     */
     public FigureType getFigure() {
         return figure;
     }
 
+    /**
+     * @param figure Type of figure that is moved.
+     */
     public void setFigure(FigureType figure) {
         this.figure = figure;
     }
 
+    /**
+     * @return Number of column from which the figure is moved.
+     */
     public int getSourceCol() {
         return source_col;
     }
 
+    /**
+     * @param source_col Number of column from which the figure is moved.
+     */
     public void setSourceCol(int source_col) {
         if(source_col >= 0 && source_col <= 7) {
             this.source_col = source_col;
@@ -57,10 +78,16 @@ public class OneMove {
         }
     }
 
+    /**
+     * @return Number of row from which the figure is moved.
+     */
     public int getSourceRow() {
         return source_row;
     }
 
+    /**
+     * @param source_row Number of row from which the figure is moved.
+     */
     public void setSourceRow(int source_row) {
         if(source_row >= 0 && source_row <= 7) {
             this.source_row = source_row;
@@ -71,18 +98,30 @@ public class OneMove {
         }
     }
 
+    /**
+     * @return If figure captured any opponent's figure during this move.
+     */
     public boolean getCapture() {
         return this.capture;
     }
 
+    /**
+     * @param capture If figure captured any opponent's figure during this move.
+     */
     public void setCapture(boolean capture) {
         this.capture = capture;
     }
 
+    /**
+     * @return Number of column to which the figure is moved.
+     */
     public int getDestinationCol() {
         return destination_col;
     }
 
+    /**
+     * @param destination_col Number of column to which the figure is moved.
+     */
     public void setDestinationCol(int destination_col) {
         if(destination_col >= 0 && destination_col <= 7) {
             this.destination_col = destination_col;
@@ -93,10 +132,16 @@ public class OneMove {
         }
     }
 
+    /**
+     * @return Number of row to which the figure is moved.
+     */
     public int getDestinationRow() {
         return destination_row;
     }
 
+    /**
+     * @param destination_row Number of row to which the figure is moved.
+     */
     public void setDestinationRow(int destination_row) {
         if(destination_row >= 0 && destination_row <= 7) {
             this.destination_row = destination_row;
@@ -107,22 +152,37 @@ public class OneMove {
         }
     }
 
+    /**
+     * @return To which type of figure is pawn promoted.
+     */
     public FigureType getPromotion(){
         return this.promotion;
     }
 
+    /**
+     * @param promotion To which type of figure is pawn promoted.
+     */
     public void setPromotion(FigureType promotion) {
         this.promotion = promotion;
     }
 
+    /**
+     * @return Special state which happens after move (check(mate), draw).
+     */
     public SpecialState getSpecial() {
         return special;
     }
 
+    /**
+     * @param special Special state which happens after move (check(mate), draw).
+     */
     public void setSpecial(SpecialState special) {
         this.special = special;
     }
 
+    /**
+     * Sets move to default values.
+     */
     public void clearMove() {
         this.white_player = false;
         this.figure = null;
@@ -135,6 +195,9 @@ public class OneMove {
         this.special = null;
     }
 
+    /**
+     * @return Representation of move as specified in notation.
+     */
     public String printOnRow() {
         String ret = "";
         if(this.figure != null && this.figure != FigureType.p) {
@@ -172,14 +235,25 @@ public class OneMove {
         return ret;
     }
 
+    /**
+     * @param col   Given number of column.
+     * @return      Letter representing given column.
+     */
     private String getColAsString(int col) {
         return Character.toString((char)(col + 97));
     }
 
+    /**
+     * @param row   Given number of row.
+     * @return      Number representing given row.
+     */
     private String getRowAsString(int row) {
         return Integer.toString(row + 1);
     }
 
+    /**
+     * Prints notation in readable form in case of debugging.
+     */
     public void debugPrint() {
         System.out.println("White player: " + this.white_player);
         if(this.figure != null) {

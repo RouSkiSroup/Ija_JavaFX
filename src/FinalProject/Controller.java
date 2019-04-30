@@ -114,12 +114,12 @@ public class Controller implements Initializable {
     public Label lampicka;
     public ChoiceBox promoteChoice;
 
-    Board board;
-    Chess chess;
-    boolean stop;
-    int sleepTime;
-    Timer timer;
-    TimerTask task;
+    private Board board;
+    private Chess chess;
+    private boolean stop;
+    private int sleepTime;
+    private Timer timer;
+    private TimerTask task;
 
     /**
      * Initialize GUI.
@@ -190,7 +190,7 @@ public class Controller implements Initializable {
     /**
      * Updates list of notations in GUI.
      */
-    public void updateNotationList(){
+    private void updateNotationList(){
         this.notationList2.getSelectionModel().select(chess.getCounter()-1);
     }
 
@@ -253,7 +253,7 @@ public class Controller implements Initializable {
     /**
      * Fills board in GUI with figures according to program board representation "board".
      */
-    public void fillBoard(){
+    private void fillBoard(){
         ImageView view;
         File file;
         Image image;
@@ -274,7 +274,7 @@ public class Controller implements Initializable {
      * @param figure    Type of figure.
      * @return  Returns string representation of path to image.
      */
-    public String getFigureImage(UniversalFigure figure){
+    private String getFigureImage(UniversalFigure figure){
         String res = "src/images/";
         if (figure != null) {
             res = "src/images/";
@@ -299,7 +299,7 @@ public class Controller implements Initializable {
      * @param row   Row of the board.
      * @return  Returns object which is on coordinates in grid.
      */
-    public ImageView getViewByIndex(int col, int row){
+    private ImageView getViewByIndex(int col, int row){
         String merge = Integer.toString(col) + Integer.toString(row);
         int res = Integer.parseInt(merge);
         switch (res){
@@ -475,7 +475,7 @@ public class Controller implements Initializable {
     /**
      * Reloads notations in GUI notation list.
      */
-    public void reloadNotation(){
+    private void reloadNotation(){
         notationList2.getItems().clear();
         for (int i = 0; i < chess.getMoves().size(); i++){
             notationList2.getItems().addAll(chess.getMoves().get(i).printOnRow());
@@ -510,7 +510,7 @@ public class Controller implements Initializable {
      * @param string    String figure name.
      * @return  Returns enum type of figure.
      */
-    public FigureType strToFigureType(String string){
+    private FigureType strToFigureType(String string){
         if (string.equals("Dáma")){
             return FigureType.D;
         }

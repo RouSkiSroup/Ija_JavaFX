@@ -6,7 +6,15 @@ import FinalProject.common.SpecialState;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class used for parsing the file with moves.
+ */
 public class ParseNotations {
+    /**
+     * Loads a file and parses it line by line.
+     * @param file  Name of the file that contains moves.
+     * @return  List of moves loaded in special class.
+     */
     public List<OneMove> parseFile(String file) {
         List<OneMove> notation = new ArrayList<>();
         ReadFile reader = new ReadFile(file);
@@ -25,6 +33,12 @@ public class ParseNotations {
         return notation;
     }
 
+    /**
+     * Processes one move in the notation character by character.
+     * @param moveAsString  Move in chess notation.
+     * @param white_player  Which players turn it is.
+     * @return  One move processed to special class.
+     */
     private OneMove parseMove(String moveAsString, boolean white_player) {
         OneMove move = new OneMove(white_player,null,-1, -1, false,
                 -1, -1, null, null);
@@ -46,9 +60,15 @@ public class ParseNotations {
         return move;
     }
 
-    private int parseFigureType(String line, OneMove move) {
-        if(Character.isLetter(line.charAt(0)) && Character.isUpperCase(line.charAt(0))) {
-            move.setFigure(FigureType.valueOf(Character.toString(line.charAt(0))));
+    /**
+     * Processes the type of figure in move.
+     * @param moveAsString  Move in chess notation.
+     * @param move          Class of move used inside the program.
+     * @return  How many characters were processed.
+     */
+    private int parseFigureType(String moveAsString, OneMove move) {
+        if(Character.isLetter(moveAsString.charAt(0)) && Character.isUpperCase(moveAsString.charAt(0))) {
+            move.setFigure(FigureType.valueOf(Character.toString(moveAsString.charAt(0))));
             return 1;
         }
         else {
@@ -57,15 +77,21 @@ public class ParseNotations {
         }
     }
 
-    private int parseDistinguish(String line, OneMove move) {
-        if(Character.isLetter(line.charAt(0)) && Character.isUpperCase(line.charAt(0)) &&
-                Character.isLetter(line.charAt(1)) && Character.isUpperCase(line.charAt(1))) {
-            move.setSourceCol((int)line.charAt(0) - 97);
+    /**
+     * Processes specified source used if short notation wouldn't be enough.
+     * @param moveAsString  Move in chess notation.
+     * @param move          Class of move used inside the program.
+     * @return  How many characters were processed.
+     */
+    private int parseDistinguish(String moveAsString, OneMove move) {
+        if(Character.isLetter(moveAsString.charAt(0)) && Character.isUpperCase(moveAsString.charAt(0)) &&
+                Character.isLetter(moveAsString.charAt(1)) && Character.isUpperCase(moveAsString.charAt(1))) {
+            move.setSourceCol((int)moveAsString.charAt(0) - 97);
             return 1;
         }
-        else if(Character.isDigit(line.charAt(0)) &&
-                Character.isLetter(line.charAt(1)) && Character.isLowerCase(line.charAt(1))) {
-            move.setSourceRow(Character.getNumericValue(line.charAt(0)) - 1);
+        else if(Character.isDigit(moveAsString.charAt(0)) &&
+                Character.isLetter(moveAsString.charAt(1)) && Character.isLowerCase(moveAsString.charAt(1))) {
+            move.setSourceRow(Character.getNumericValue(moveAsString.charAt(0)) - 1);
             return 1;
         }
         else {
@@ -73,8 +99,14 @@ public class ParseNotations {
         }
     }
 
-    private int parseCapture(String line, OneMove move) {
-        if(line.charAt(0) == 'x') {
+    /**
+     * Processes if any figure is captured during this move.
+     * @param moveAsString  Move in chess notation.
+     * @param move          Class of move used inside the program.
+     * @return  How many characters were processed.
+     */
+    private int parseCapture(String moveAsString, OneMove move) {
+        if(moveAsString.charAt(0) == 'x') {
             move.setCapture(true);
             return 1;
         }
@@ -83,25 +115,31 @@ public class ParseNotations {
         }
     }
 
-    private int parseLocations(String line, OneMove move) {
+    /**
+     * Processes source and destination location of figure in move.
+     * @param moveAsString  Move in chess notation.
+     * @param move          Class of move used inside the program.
+     * @return  How many characters were processed.
+     */
+    private int parseLocations(String moveAsString, OneMove move) {
         // Loading source and destination
-        if(line.length() > 3 &&
-                Character.isLetter(line.charAt(0)) && Character.isLowerCase(line.charAt(0)) &&
-                Character.isDigit(line.charAt(1)) &&
-                Character.isLetter(line.charAt(2)) && Character.isLowerCase(line.charAt(2)) &&
-                Character.isDigit(line.charAt(3))) {
-            move.setSourceCol((int)line.charAt(0) - 97);
-            move.setSourceRow(Character.getNumericValue(line.charAt(1)) - 1);
-            move.setDestinationCol((int)line.charAt(2) - 97);
-            move.setDestinationRow(Character.getNumericValue(line.charAt(3)) - 1);;
+        if(moveAsString.length() > 3 &&
+                Character.isLetter(moveAsString.charAt(0)) && Character.isLowerCase(moveAsString.charAt(0)) &&
+                Character.isDigit(moveAsString.charAt(1)) &&
+                Character.isLetter(moveAsString.charAt(2)) && Character.isLowerCase(moveAsString.charAt(2)) &&
+                Character.isDigit(moveAsString.charAt(3))) {
+            move.setSourceCol((int)moveAsString.charAt(0) - 97);
+            move.setSourceRow(Character.getNumericValue(moveAsString.charAt(1)) - 1);
+            move.setDestinationCol((int)moveAsString.charAt(2) - 97);
+            move.setDestinationRow(Character.getNumericValue(moveAsString.charAt(3)) - 1);;
             return 4;
         }
         // Loading only destination
-        else if(line.length() > 1  &&
-                Character.isLetter(line.charAt(0)) && Character.isLowerCase(line.charAt(0)) &&
-                Character.isDigit(line.charAt(1))) {
-            move.setDestinationCol((int)line.charAt(0) - 97);
-            move.setDestinationRow(Character.getNumericValue(line.charAt(1)) - 1);
+        else if(moveAsString.length() > 1  &&
+                Character.isLetter(moveAsString.charAt(0)) && Character.isLowerCase(moveAsString.charAt(0)) &&
+                Character.isDigit(moveAsString.charAt(1))) {
+            move.setDestinationCol((int)moveAsString.charAt(0) - 97);
+            move.setDestinationRow(Character.getNumericValue(moveAsString.charAt(1)) - 1);
             return 2;
         }
         else {
@@ -111,11 +149,17 @@ public class ParseNotations {
         }
     }
 
-    private int parsePromotion(String line, OneMove move) {
-        if(line.length() > 0 && Character.isLetter(line.charAt(0)) && Character.isUpperCase(line.charAt(0))) {
+    /**
+     * Processes the type of figure used in case of promotion.
+     * @param moveAsString  Move in chess notation.
+     * @param move          Class of move used inside the program.
+     * @return  How many characters were processed.
+     */
+    private int parsePromotion(String moveAsString, OneMove move) {
+        if(moveAsString.length() > 0 && Character.isLetter(moveAsString.charAt(0)) && Character.isUpperCase(moveAsString.charAt(0))) {
             if(move.getFigure() == FigureType.p &&
                     (move.getDestinationRow() == 0 || move.getDestinationRow() == 7)) {
-                switch(line.charAt(0)) {
+                switch(moveAsString.charAt(0)) {
                     case 'D':
                         move.setPromotion(FigureType.D);
                         return 1;
@@ -145,12 +189,18 @@ public class ParseNotations {
         }
     }
 
-    private int parseSpecial(String line, OneMove move) {
-        if(line.length() > 0){
-            if(line.charAt(0) == '+') {
+    /**
+     * Processes the special character in move.
+     * @param moveAsString  Move in chess notation.
+     * @param move          Class of move used inside the program.
+     * @return  How many characters were processed.
+     */
+    private int parseSpecial(String moveAsString, OneMove move) {
+        if(moveAsString.length() > 0){
+            if(moveAsString.charAt(0) == '+') {
                 move.setSpecial(SpecialState.CHECK);
             }
-            else if(line.charAt(0) == '#') {
+            else if(moveAsString.charAt(0) == '#') {
                 move.setSpecial(SpecialState.CHECKMATE);
             }
             else {
