@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Controller implements Initializable {
 
-    ObservableList<String> figureChoice = FXCollections.observableArrayList("Dama","Vez","Strelec","Jezdec","Pesec");
+    ObservableList<String> figureChoice = FXCollections.observableArrayList("Dama","Vez","Strelec","Jezdec");
 
     public TextArea NotationList;
     public Button next;
@@ -471,11 +471,8 @@ public class Controller implements Initializable {
         else if (string.equals("Strelec")){
             return FigureType.S;
         }
-        else if (string.equals("Kun")){
-            return FigureType.K;
-        }
-        else if (string.equals("Pesec")) {
-            return FigureType.p;
+        else if (string.equals("Jezdec")){
+            return FigureType.J;
         }
         System.err.println("Spatna hodnota v Figure promotion");
         return FigureType.D;
