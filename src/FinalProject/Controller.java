@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Controller implements Initializable {
 
-    ObservableList<String> figureChoice = FXCollections.observableArrayList("Dama","Vez","Strelec","Jezdec");
+    ObservableList<String> figureChoice = FXCollections.observableArrayList("Dáma","Věž","Střelec","Jezdec");
 
     public TextArea NotationList;
     public Button next;
@@ -489,13 +489,13 @@ public class Controller implements Initializable {
      * @return  Returns enum type of figure.
      */
     public FigureType strToFigureType(String string){
-        if (string.equals("Dama")){
+        if (string.equals("Dáma")){
             return FigureType.D;
         }
-        else if (string.equals("Vez")){
+        else if (string.equals("Věž")){
             return FigureType.V;
         }
-        else if (string.equals("Strelec")){
+        else if (string.equals("Střelec")){
             return FigureType.S;
         }
         else if (string.equals("Jezdec")){
