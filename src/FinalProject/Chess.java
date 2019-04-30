@@ -208,23 +208,23 @@ public class Chess {
             }
         }
 
-        // Iterate through all figures of player who checked the other player.
-        for(UniversalFigure figure: figures) {
-            // Iterate through all fields that king of checked player can move to.
-            for(BoardField field: fields) {
+        boolean checked_field = false;
+        // Iterate through all fields that king of checked player can move to.
+        for(BoardField field: fields) {
+            // Iterate through all figures of player who checked the other player.
+            for(UniversalFigure figure: figures) {
                 // Try if all fields that king can move to are also checked.
                 if(figure.canMove(field)) {
-                    fields.remove(field);
+                    checked_field = true;
                 }
             }
-        }
-
-        if(fields.size() == 0) {
-            return true;
-        }
-        else {
+            if(checked_field) {
+                checked_field = false;
+                continue;
+            }
             return false;
         }
+        return true;
     }
 
     public void restartGame() {
