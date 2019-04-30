@@ -6,6 +6,8 @@ import java.io.IOException;
 
 /**
  * Class for reading file.
+ * @author Filip Jerabek (xjerab24), Daniel Konecny (xkonec75)
+ * @version 1.0
  */
 public class ReadFile {
     private BufferedReader reader;

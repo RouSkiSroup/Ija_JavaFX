@@ -1,9 +1,12 @@
 package FinalProject.figures;
 
-import FinalProject.common.FigureType;
-import FinalProject.figures.UniversalFigure;
 import FinalProject.game.BoardField;
 
+/**
+ * Class represents pawn figure.
+ * @author Filip Jerabek (xjerab24), Daniel Konecny (xkonec75)
+ * @version 2.0
+ */
 public class Pawn extends UniversalFigure {
     public Pawn(BoardField boardField, boolean white) {
         super(boardField, white, FigureType.p);

@@ -1,9 +1,12 @@
 package FinalProject.figures;
 
-import FinalProject.common.FigureType;
-import FinalProject.figures.UniversalFigure;
 import FinalProject.game.BoardField;
 
+/**
+ * Class represents queen figure.
+ * @author Filip Jerabek (xjerab24), Daniel Konecny (xkonec75)
+ * @version 2.0
+ */
 public class Queen extends UniversalFigure {
     public Queen(BoardField boardField, boolean white) {
         super(boardField, white, FigureType.D);

@@ -1,10 +1,11 @@
 package FinalProject.game;
 
-import FinalProject.common.FigureType;
-import FinalProject.common.SpecialState;
+import FinalProject.figures.FigureType;
 
 /**
  * Class representing one move with all the needed information.
+ * @author Filip Jerabek (xjerab24), Daniel Konecny (xkonec75)
+ * @version 1.0
  */
 public class OneMove {
     private boolean white_player;

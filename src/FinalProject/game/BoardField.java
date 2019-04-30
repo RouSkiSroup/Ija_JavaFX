@@ -4,6 +4,8 @@ import FinalProject.figures.UniversalFigure;
 
 /**
  * Class representing one field on the board.
+ * @author Filip Jerabek (xjerab24), Daniel Konecny (xkonec75)
+ * @version 1.0
  */
 public class BoardField {
     private Board board;

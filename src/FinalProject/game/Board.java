@@ -1,12 +1,14 @@
 package FinalProject.game;
 
-import FinalProject.common.FigureType;
+import FinalProject.figures.FigureType;
 import FinalProject.figures.UniversalFigure;
 
 import java.util.ArrayList;
 
 /**
  * Class representing board used for the game using 2D array of fields.
+ * @author Filip Jerabek (xjerab24), Daniel Konecny (xkonec75)
+ * @version 1.0
  */
 public class Board {
     public BoardField[][] board;

@@ -1,9 +1,12 @@
 package FinalProject.figures;
 
-import FinalProject.common.FigureType;
-import FinalProject.figures.UniversalFigure;
 import FinalProject.game.BoardField;
 
+/**
+ * Class represents knight figure.
+ * @author Filip Jerabek (xjerab24), Daniel Konecny (xkonec75)
+ * @version 2.0
+ */
 public class Knight extends UniversalFigure {
     public Knight(BoardField boardField, boolean white) {
         super(boardField, white, FigureType.J);

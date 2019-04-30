@@ -1,11 +1,12 @@
 package FinalProject.figures;
 
-import FinalProject.common.FigureType;
 import FinalProject.game.Board;
 import FinalProject.game.BoardField;
 
 /**
  * Abstract class for figure.
+ * @author Filip Jerabek (xjerab24), Daniel Konecny (xkonec75)
+ * @version 2.0
  */
 public abstract class UniversalFigure {
     private BoardField boardField;

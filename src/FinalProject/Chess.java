@@ -1,12 +1,17 @@
 package FinalProject;
 
-import FinalProject.common.FigureType;
-import FinalProject.common.SpecialState;
+import FinalProject.figures.FigureType;
+import FinalProject.game.SpecialState;
 import FinalProject.figures.*;
 import FinalProject.game.*;
 
 import java.util.*;
 
+/**
+ * Class representing the game of chess with its principles.
+ * @author Filip Jerabek (xjerab24), Daniel Konecny (xkonec75)
+ * @version 3.0
+ */
 public class Chess {
     Board board;
     private List<OneMove> moves;

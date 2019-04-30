@@ -1,6 +1,6 @@
 package FinalProject;
 
-import FinalProject.common.FigureType;
+import FinalProject.figures.FigureType;
 import FinalProject.figures.UniversalFigure;
 import FinalProject.game.Board;
 import javafx.collections.FXCollections;
@@ -26,7 +26,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- *  Class controls GUI.
+ * Class controls GUI.
+ * @author Filip Jerabek (xjerab24), Daniel Konecny (xkonec75)
+ * @version 1.0
  */
 public class Controller implements Initializable {
 

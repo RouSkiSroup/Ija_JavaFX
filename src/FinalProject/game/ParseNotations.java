@@ -1,14 +1,15 @@
 package FinalProject.game;
 
-import FinalProject.common.FigureType;
+import FinalProject.figures.FigureType;
 import FinalProject.common.ReadFile;
-import FinalProject.common.SpecialState;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Class used for parsing the file with moves.
+ * @author Filip Jerabek (xjerab24), Daniel Konecny (xkonec75)
+ * @version 3.0
  */
 public class ParseNotations {
     /**

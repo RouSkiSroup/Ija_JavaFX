@@ -1,11 +1,11 @@
 package FinalProject.figures;
 
-import FinalProject.common.FigureType;
-import FinalProject.figures.UniversalFigure;
 import FinalProject.game.BoardField;
 
 /**
  * Class represents bishop figure.
+ * @author Filip Jerabek (xjerab24), Daniel Konecny (xkonec75)
+ * @version 2.0
  */
 public class Bishop extends UniversalFigure {
     public Bishop(BoardField boardField, boolean white) {
