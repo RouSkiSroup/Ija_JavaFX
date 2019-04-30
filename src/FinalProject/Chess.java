@@ -257,9 +257,14 @@ public class Chess {
         this.counter = c;
     }
 
-    int buildMove(int col, int row, FigureType promotion_type) {
+    void buildMove(int col, int row, FigureType promotion_type) {
         col -= 1;
         row -= 1;
+
+        if(this.board.getField(col, row).getFigure() == null) {
+            return;
+        }
+        
         if(manualMove.getSourceCol() == -1 && manualMove.getSourceRow() == -1) {
             manualMove.setWhitePlayer(this.counter % 2 == 0);
             manualMove.setFigure(this.board.getField(col, row).getFigure().getType());
@@ -299,7 +304,6 @@ public class Chess {
             System.err.println("ERROR: Vnitrni chyba vytvareni pohybu buildMove()!");
             System.exit(1);
         }
-        return 0;
     }
 
     public void printBoard() {
