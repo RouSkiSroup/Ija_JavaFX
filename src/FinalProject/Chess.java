@@ -12,6 +12,9 @@ public class Chess {
     private Queue<UniversalFigure> figureQueue = new LinkedList<>();
     private int counter;
     private OneMove manualMove;
+    private BoardField undo_field;
+    private UniversalFigure undo_figure;
+    private UniversalFigure undo_capture;
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -83,7 +86,7 @@ public class Chess {
                 return 0;
             }
 
-            moveFigure(figure, field);
+            moveFigure(figure, field, null);
 
             if(checkCheck(this.counter % 2 != 0)) {
                 System.out.println("Nepovoleny tah - zpusobi sach od soupere.");
@@ -103,6 +106,13 @@ public class Chess {
                     return 2;
                 }
             }
+            else {
+                if(checkCheckmate(this.counter % 2 != 0)) {
+                    System.out.println("Pat.");
+                    return 2;
+                }
+            }
+
             counter += 1;
             return 0;
         }
@@ -144,8 +154,8 @@ public class Chess {
         return null;
     }
 
-    private void moveFigure(UniversalFigure figure, BoardField field) {
-        figure.getBoardField().setFigure(null);
+    private void moveFigure(UniversalFigure figure, BoardField field, UniversalFigure set) {
+        figure.getBoardField().setFigure(set);
         figure.setBoardField(field);
         field.setFigure(figure);
     }
@@ -196,35 +206,45 @@ public class Chess {
      * @return
      */
     private boolean checkCheckmate(boolean isWhitesMove) {
-        ArrayList<UniversalFigure> figures = this.board.getFiguresOfPlayer(!isWhitesMove);
-        ArrayList<BoardField> fields = new ArrayList<>();
-        UniversalFigure king = this.board.getKingOfPlayer(isWhitesMove);
+        ArrayList<UniversalFigure> defending_figures = this.board.getFiguresOfPlayer(isWhitesMove);
 
-        for(int col = 0; col < 8; col++) {
-            for(int row = 0; row < 8; row++) {
-                if(king.canMove(this.board.getField(col, row))) {
-                    fields.add(this.board.getField(col, row));
+        for(UniversalFigure defending_figure: defending_figures) {
+            ArrayList<BoardField> available_fields = new ArrayList<>();
+            for(int col = 0; col < 8; col++) {
+                for(int row = 0; row < 8; row++) {
+                    if(defending_figure.canMove(this.board.getField(col, row))) {
+                        available_fields.add(this.board.getField(col, row));
+                    }
                 }
             }
-        }
 
-        boolean checked_field = false;
-        // Iterate through all fields that king of checked player can move to.
-        for(BoardField field: fields) {
-            // Iterate through all figures of player who checked the other player.
-            for(UniversalFigure figure: figures) {
-                // Try if all fields that king can move to are also checked.
-                if(figure.canMove(field)) {
-                    checked_field = true;
+            for(BoardField available_field: available_fields) {
+                if(willUncheck(defending_figure, available_field, isWhitesMove)) {
+                    /*
+                    System.out.println("Unchecks " + defending_figure.getType().name() +
+                            defending_figure.getBoardField().getCol() + ":" +
+                            defending_figure.getBoardField().getRow());
+                     */
+                    return false;
                 }
             }
-            if(checked_field) {
-                checked_field = false;
-                continue;
-            }
-            return false;
         }
         return true;
+    }
+
+    private boolean willUncheck(UniversalFigure figure, BoardField field, boolean isWhitesMove) {
+        boolean uncheck = true;
+        this.undo_field = figure.getBoardField();
+        this.undo_figure = figure;
+        this.undo_capture = field.getFigure();
+
+        moveFigure(figure, field, null);
+        if(checkCheck(!isWhitesMove)) {
+            uncheck = false;
+        }
+        moveFigure(undo_figure, undo_field, undo_capture);
+
+        return uncheck;
     }
 
     public void restartGame() {

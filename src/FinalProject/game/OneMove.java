@@ -168,7 +168,7 @@ public class OneMove {
 
     public String printOnRow() {
         String ret = "";
-        if(this.figure != null) {
+        if(this.figure != null && this.figure != FigureType.p) {
             ret += this.figure.name();
         }
         if(this.source_col != -1) {

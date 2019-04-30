@@ -30,18 +30,6 @@ public abstract class UniversalFigure {
         return this.white;
     }
 
-    public void printState() {
-        String state = getType().name();
-        if(isWhite()) {
-            state += "[W]";
-        }
-        else {
-            state += "[B]";
-        }
-        state += getBoardField().getCol() + ":" + getBoardField().getRow();
-        System.out.println(state);
-    }
-
     protected boolean checkWayU(int col, int start_row, int end_row) {
         Board board = this.getBoardField().getBoard();
         for(int row = start_row + 1; row <= end_row; row += 1) {
