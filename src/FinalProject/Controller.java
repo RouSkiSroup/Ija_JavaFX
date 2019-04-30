@@ -17,7 +17,9 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -25,6 +27,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+/**
+ *
+ */
 public class Controller implements Initializable {
 
     ObservableList<String> figureChoice = FXCollections.observableArrayList("Dama","Vez","Strelec","Jezdec");
@@ -147,12 +152,20 @@ public class Controller implements Initializable {
 
     }
 
+    /**
+     * Implements operation undo.
+     * @param actionEvent   Variable signalizing button press.
+     */
     public void previousMove(ActionEvent actionEvent) {
         this.chess.positionMove(this.chess.getCounter()-1);
         this.fillBoard();
         this.updateNotationList();
     }
 
+    /**
+     * Implements operation next.
+     * @param actionEvent   Variable signalizing button press.
+     */
     public void nextMove(ActionEvent actionEvent) {
         int tmp;
         if ((tmp = chess.performMove()) == 2){
@@ -162,10 +175,17 @@ public class Controller implements Initializable {
         this.updateNotationList();
     }
 
+    /**
+     * Updates list of notations in GUI.
+     */
     public void updateNotationList(){
         this.notationList2.getSelectionModel().select(chess.getCounter()-1);
     }
 
+    /**
+     * Implements automatic moving. Gets time delay from input in GUI.
+     * @param actionEvent Variable signalizing button press.
+     */
     public void autoMove(ActionEvent actionEvent) {
 
         this.task = new TimerTask()
@@ -206,11 +226,18 @@ public class Controller implements Initializable {
         this.timer.schedule(this.task, 0, this.sleepTime * 1000);
     }
 
+    /**
+     * Stops automatic moving.
+     * @param actionEvent Variable signalizing button press.
+     */
     public void stopMove(ActionEvent actionEvent) {
         this.timer.cancel();
         this.timer.purge();
     }
 
+    /**
+     * Fills board in GUI with figures according to program board representation "board".
+     */
     public void fillBoard(){
         ImageView view;
         File file;
@@ -227,6 +254,11 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Make path to figure image according to type.
+     * @param figure    Type of figure.
+     * @return  Returns string representation of path to image.
+     */
     public String getFigureImage(UniversalFigure figure){
         String res = "src/images/";
         if (figure != null) {
@@ -246,6 +278,12 @@ public class Controller implements Initializable {
 
     }
 
+    /**
+     * Finds and returns ImageView in GUI according to col and row of board.
+     * @param col   Column of the board.
+     * @param row   Row of the board.
+     * @return  Returns object which is on coordinates in grid.
+     */
     public ImageView getViewByIndex(int col, int row){
         String merge = Integer.toString(col) + Integer.toString(row);
         int res = Integer.parseInt(merge);
@@ -382,37 +420,10 @@ public class Controller implements Initializable {
         return null;
     }
 
-    private Node getNodeFromGridPane2(GridPane gridPane, int col, int row) {
-        for (Node node : gridPane.getChildren()) {
-            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
-                return node;
-            }
-        }
-        return null;
-    }
-
-    public Node getNodeFromGridPane (final int row, final int column, GridPane gridPane) {
-        Node result = null;
-        ObservableList<Node> childrens = gridPane.getChildren();
-        System.out.println(childrens.size());
-        for (Node node : childrens) {
-            if(node == null){
-                System.out.println("Chyba");
-            }
-            else{
-                System.out.println("ok");
-                if(gridPane.getRowIndex(node) == row) {
-                    if (gridPane.getColumnIndex(node) == column){
-                        result = node;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
-
+    /**
+     * Represents click into notation list and moves figures.
+     * @param mouseEvent    Variable signalizing clicking into notation list.
+     */
     public void setMove(MouseEvent mouseEvent) {
         int index = notationList2.getSelectionModel().getSelectedIndex()+1;
         this.chess.setCounter(index);
@@ -420,6 +431,10 @@ public class Controller implements Initializable {
         this.fillBoard();
     }
 
+    /**
+     * Represents clicking on one board field and sends the information to backend methods.
+     * @param mouseEvent    Variable signalizing clicking on board field.
+     */
     public void selectField(MouseEvent mouseEvent) {
         int col;
         int row;
@@ -435,6 +450,9 @@ public class Controller implements Initializable {
 
     }
 
+    /**
+     * Reloads notations in GUI notation list.
+     */
     public void reloadNotation(){
         notationList2.getItems().clear();
         for (int i = 0; i < chess.getMoves().size(); i++){
@@ -442,6 +460,10 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Loads notation from file, stores them in backend variables and reload notation list.
+     * @param actionEvent Variable signalizing button press.
+     */
     public void loadNotation(ActionEvent actionEvent) {
         FileChooser fc = new FileChooser();
         File selectedFile = fc.showOpenDialog(null);
@@ -461,6 +483,11 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Converts figure name into it's enum type.
+     * @param string    String figure name.
+     * @return  Returns enum type of figure.
+     */
     public FigureType strToFigureType(String string){
         if (string.equals("Dama")){
             return FigureType.D;
@@ -476,6 +503,52 @@ public class Controller implements Initializable {
         }
         System.err.println("Spatna hodnota v Figure promotion");
         return FigureType.D;
+    }
+
+    /**
+     * Restarts game.
+     * @param actionEvent   Variable signalizing button press.
+     */
+    public void restart(ActionEvent actionEvent) {
+        chess.restartGame();
+        updateNotationList();
+        fillBoard();
+    }
+
+    /**
+     * Saves notation into chosen file.
+     * @param actionEvent   Variable signalizing button press.
+     */
+    public void saveNotation(ActionEvent actionEvent) {
+        FileChooser fc = new FileChooser();
+        File selectedFile = fc.showOpenDialog(null);
+
+        if(selectedFile != null){
+            String data = "";
+            int cnt = 1;
+            for(int i = 0; i < chess.getMoves().size(); i++){
+                if(i % 2 == 0){
+                    data += cnt + ". ";
+                    data += chess.getMoves().get(i).printOnRow() + " ";
+                    cnt += 1;
+                }
+                else{
+                    data += chess.getMoves().get(i).printOnRow() + "\r\n";
+                }
+            }
+            System.out.println(data);
+            try {
+                Files.write(Paths.get(selectedFile.getAbsolutePath()), data.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+
+        }
+        else{
+            System.err.println("Soubor neni validni.");
+        }
     }
 }
 
