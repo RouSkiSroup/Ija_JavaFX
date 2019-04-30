@@ -126,7 +126,7 @@ public class Controller implements Initializable {
         this.sleepTime = 0;
 
         promoteChoice.setItems(figureChoice);
-        promoteChoice.setValue("Dama");
+        promoteChoice.setValue("Dáma");
 
 
 //        try {
