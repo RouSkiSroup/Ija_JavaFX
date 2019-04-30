@@ -1,6 +1,7 @@
 package FinalProject;
 
 import FinalProject.common.FigureType;
+import FinalProject.common.SpecialState;
 import FinalProject.common.UniversalFigure;
 import FinalProject.game.*;
 
@@ -12,6 +13,7 @@ public class Chess {
     private Queue<UniversalFigure> figureQueue = new LinkedList<>();
     private int counter;
     private OneMove manualMove;
+    private boolean checkmate_try = false;
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
@@ -93,13 +95,16 @@ public class Chess {
 
             if(checkCheck(this.counter % 2 == 0)) {
                 System.out.println("Sach.");
+                this.moves.get(this.counter).setSpecial(SpecialState.CHECK);
                 if(checkCheckmate(this.counter % 2 != 0)) {
+                    this.moves.get(this.counter).setSpecial(SpecialState.CHECKMATE);
                     System.out.println("Mat.");
                     return 2;
                 }
             }
             else {
                 if(checkCheckmate(this.counter % 2 != 0)) {
+                    this.moves.get(this.counter).setSpecial(SpecialState.DRAW);
                     System.out.println("Pat.");
                     return 3;
                 }
@@ -146,6 +151,13 @@ public class Chess {
     }
 
     private void moveFigure(UniversalFigure figure, BoardField field, UniversalFigure set) {
+        // Don't write capture, when move is performed only for checkmate check.
+        if(!checkmate_try) {
+            if(field.getFigure() != null) {
+                this.moves.get(this.counter).setCapture(true);
+            }
+        }
+
         figure.getBoardField().setFigure(set);
         figure.setBoardField(field);
         field.setFigure(figure);
@@ -228,6 +240,7 @@ public class Chess {
         BoardField undo_field = figure.getBoardField();
         UniversalFigure undo_figure = figure;
         UniversalFigure undo_capture = field.getFigure();
+        checkmate_try = true;
 
         moveFigure(figure, field, null);
         if(checkCheck(!isWhitesMove)) {
@@ -235,6 +248,7 @@ public class Chess {
         }
         moveFigure(undo_figure, undo_field, undo_capture);
 
+        checkmate_try = false;
         return uncheck;
     }
 
