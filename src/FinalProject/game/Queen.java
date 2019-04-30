@@ -15,7 +15,6 @@ public class Queen extends UniversalFigure {
             }
         }
         BoardField source = this.getBoardField();
-        Board board = this.getBoardField().getBoard();
 
         // Checks if the destination is achievable.
         if(Math.abs(destination.getCol() - source.getCol()) != Math.abs(destination.getRow() - source.getRow()) &&

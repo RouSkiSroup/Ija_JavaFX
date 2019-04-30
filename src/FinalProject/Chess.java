@@ -8,17 +8,17 @@ import FinalProject.game.*;
 import java.util.*;
 
 public class Chess {
-    public Board board;
+    Board board;
     private List<OneMove> moves;
     private Queue<UniversalFigure> figureQueue = new LinkedList<>();
     private int counter;
     private OneMove manualMove;
     private boolean checkmate_try = false;
 
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_GREEN = "\u001B[32m";
+    private static final String ANSI_CYAN = "\u001B[36m";
+    private static final String ANSI_WHITE = "\u001B[37m";
 
     Chess(Board board){
         this.moves = new ArrayList<>();
@@ -59,13 +59,43 @@ public class Chess {
         }
     }
 
-    public List<OneMove> getMoves() {
+    /**
+     * @return  Returns moves performed or to be performed in the game.
+     */
+    List<OneMove> getMoves() {
         return moves;
     }
 
     /**
-     * Performs move of figure.
-     * @return  Success of this operation.
+     * @return Value of counter.
+     */
+    int getCounter(){
+        return this.counter;
+    }
+
+    /**
+     * @param counter New value of counter.
+     */
+    void setCounter(int counter){
+        this.counter = counter;
+    }
+
+    /**
+     * Loads given moves.
+     * @param file  Name of file from which the moves should be loaded.
+     */
+    void loadFile(String file) {
+        ParseNotations parser = new ParseNotations();
+        this.moves = parser.parseFile(file);
+    }
+
+    /**
+     * Performs a move of a figure.
+     * @return  Result of this operation:
+     *          0 if performed or couldn't be performed;
+     *          1 if all moves were performed;
+     *          2 if game ended with checkmate;
+     *          3 if game ended with draw.
      */
     int performMove() {
         if(counter < getMoves().size()){
@@ -88,7 +118,7 @@ public class Chess {
                 return 0;
             }
 
-            UniversalFigure newFigure = promote(figure, this.moves.get(counter));
+            UniversalFigure newFigure = promote(figure, this.moves.get(counter).getPromotion());
             if(newFigure != null) {
                 field.setFigure(newFigure);
             }
@@ -117,13 +147,11 @@ public class Chess {
         }
     }
 
-    void loadFile(String file) {
-        ParseNotations parser = new ParseNotations();
-        this.moves = parser.parseFile(file);
-    }
-
-    //Performs pos moves from start on the game
-    public void positionMove(int pos){
+    /**
+     * Restarts the game from given position.
+     * @param pos Number of moves to be performed from beginning.
+     */
+    void positionMove(int pos){
         this.restartGame();
         this.counter = 0;
         while(this.counter < pos){
@@ -150,6 +178,12 @@ public class Chess {
         return null;
     }
 
+    /**
+     * Moves a figure to a new field.
+     * @param figure    Figure that should be moved.
+     * @param field     Field the figure should be moved to.
+     * @param set       Which value should be the original field set to.
+     */
     private void moveFigure(UniversalFigure figure, BoardField field, UniversalFigure set) {
         // Don't write capture, when move is performed only for checkmate check.
         if(!checkmate_try) {
@@ -163,10 +197,15 @@ public class Chess {
         field.setFigure(figure);
     }
 
-    private UniversalFigure promote(UniversalFigure figure, OneMove move) {
+    /**
+     * Takes care of possible promotion of pawn to other figure.
+     * @param figure    Figure that was moved and is checked if can be promoted.
+     * @param type      Type of new figure the pawn is promoted to.
+     * @return          New figure that replaces the original pawn.
+     */
+    private UniversalFigure promote(UniversalFigure figure, FigureType type) {
         if(figure.getType() == FigureType.p &&
                 (figure.getBoardField().getRow() == 0 || figure.getBoardField().getRow() == 7)) {
-            FigureType type = move.getPromotion();
             switch (type) {
                 case D: {
                     return new Queen(figure.getBoardField(), figure.isWhite());
@@ -187,8 +226,8 @@ public class Chess {
 
     /**
      * Checks if opponent of player in argument is in check.
-     * @param isWhitesMove  Opponent of which player (not opponent).
-     * @return  If player opponent is in check.
+     * @param isWhitesMove  Attacking player.
+     * @return  True if player's opponent is in check.
      */
     private boolean checkCheck(boolean isWhitesMove) {
         ArrayList<UniversalFigure> figures = this.board.getFiguresOfPlayer(isWhitesMove);
@@ -204,9 +243,9 @@ public class Chess {
     }
 
     /**
-     *
-     * @param isWhitesMove
-     * @return
+     * Checks if player in argument can make any moves.
+     * @param isWhitesMove  Defending player.
+     * @return  True if player cannot make any move, false otherwise.
      */
     private boolean checkCheckmate(boolean isWhitesMove) {
         ArrayList<UniversalFigure> defending_figures = this.board.getFiguresOfPlayer(isWhitesMove);
@@ -235,6 +274,13 @@ public class Chess {
         return true;
     }
 
+    /**
+     * Check if given figure can be moved in order to not leave his king checked.
+     * @param figure        Figure that should be moved.
+     * @param field         Field the figure should be moved to.
+     * @param isWhitesMove  Player who does this move.
+     * @return  True if can be moved, false otherwise.
+     */
     private boolean willUncheck(UniversalFigure figure, BoardField field, boolean isWhitesMove) {
         boolean uncheck = true;
         BoardField undo_field = figure.getBoardField();
@@ -252,36 +298,13 @@ public class Chess {
         return uncheck;
     }
 
-    public void restartGame() {
-        Queue<UniversalFigure> tmp = new LinkedList<>(this.figureQueue);
-        this.counter = 0;
-
-        /* Zkratil jsem, ale nevim, jestli funguje, prijde mi, ze to nemuze fungovat, ani v puvodnim pripade, protoze ta fronta nebude naplnena.
-        Queue<UniversalFigure> tmp = new LinkedList<>();
-        Iterator<UniversalFigure> it = this.figureQueue.iterator();
-        while(it.hasNext())  {
-            tmp.add(it.next());
-        }
-        */
-
-        for(int i = 0; i < this.board.getSize(); i++){
-            for(int j = 0; j < this.board.getSize(); j++){
-                this.board.getBoard()[i][j].setFigure(tmp.remove());
-                if (this.board.getBoard()[i][j].getFigure() != null){
-                    this.board.getBoard()[i][j].getFigure().setBoardField(this.board.getBoard()[i][j]);
-                }
-            }
-        }
-    }
-
-    public int getCounter(){
-        return this.counter;
-    }
-
-    public void setCounter(int c){
-        this.counter = c;
-    }
-
+    /**
+     * Builds a move class according to user input.
+     * @param col   Column of field given by the user.
+     * @param row   Row of field given by the user.
+     * @param promotion_type    Type of figure in case of promotion.
+     * @return  Number according to success, see chess.performMove().
+     */
     int buildMove(int col, int row, FigureType promotion_type) {
         col -= 1;
         row -= 1;
@@ -331,6 +354,25 @@ public class Chess {
         return retval;
     }
 
+    /**
+     * Restarts the game to original layout.
+     */
+    void restartGame() {
+        Queue<UniversalFigure> tmp = new LinkedList<>(this.figureQueue);
+        this.counter = 0;
+        for(int i = 0; i < this.board.getSize(); i++){
+            for(int j = 0; j < this.board.getSize(); j++){
+                this.board.getBoard()[i][j].setFigure(tmp.remove());
+                if (this.board.getBoard()[i][j].getFigure() != null){
+                    this.board.getBoard()[i][j].getFigure().setBoardField(this.board.getBoard()[i][j]);
+                }
+            }
+        }
+    }
+
+    /**
+     * Prints debug board to stdout.
+     */
     public void printBoard() {
         System.out.println();
         for(int i = 0; i < this.board.getSize(); i++){
@@ -357,8 +399,10 @@ public class Chess {
         System.out.println();
     }
 
-    //user-friendly variant of printNotation
-    void printNotation() {
+    /**
+     * Prints debug list of moves.
+     */
+    public void printNotation() {
         int index = 0;
         while(index < this.moves.size()) {
             String output = Integer.toString(index / 2 + 1);

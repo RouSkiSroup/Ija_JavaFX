@@ -135,32 +135,6 @@ public class OneMove {
         this.special = null;
     }
 
-    public void debugPrint() {
-        System.out.println("White player: " + this.white_player);
-        if(this.figure != null) {
-            System.out.println("Figure: " + this.figure.name());
-        }
-        if(this.source_col != -1) {
-            System.out.println("From col: " + getColAsString(this.source_col) + " " + this.source_col);
-        }
-        if(this.source_row != -1) {
-            System.out.println("From row: " + getRowAsString(this.source_row) + " " + this.source_row);
-        }
-        if(this.destination_col != -1) {
-            System.out.println("To col: " + getColAsString(this.destination_col) + " " + this.destination_col);
-        }
-        if(this.destination_row != -1) {
-            System.out.println("To row: " + getRowAsString(this.destination_row) + " " + this.destination_row);
-        }
-        if(this.promotion != null) {
-            System.out.println("Change: " + this.promotion.name());
-        }
-        if(this.special != null) {
-            System.out.println("Special: " + this.special);
-        }
-        System.out.println();
-    }
-
     public String printOnRow() {
         String ret = "";
         if(this.figure != null && this.figure != FigureType.p) {
@@ -204,5 +178,31 @@ public class OneMove {
 
     private String getRowAsString(int row) {
         return Integer.toString(row + 1);
+    }
+
+    public void debugPrint() {
+        System.out.println("White player: " + this.white_player);
+        if(this.figure != null) {
+            System.out.println("Figure: " + this.figure.name());
+        }
+        if(this.source_col != -1) {
+            System.out.println("From col: " + getColAsString(this.source_col) + " " + this.source_col);
+        }
+        if(this.source_row != -1) {
+            System.out.println("From row: " + getRowAsString(this.source_row) + " " + this.source_row);
+        }
+        if(this.destination_col != -1) {
+            System.out.println("To col: " + getColAsString(this.destination_col) + " " + this.destination_col);
+        }
+        if(this.destination_row != -1) {
+            System.out.println("To row: " + getRowAsString(this.destination_row) + " " + this.destination_row);
+        }
+        if(this.promotion != null) {
+            System.out.println("Change: " + this.promotion.name());
+        }
+        if(this.special != null) {
+            System.out.println("Special: " + this.special);
+        }
+        System.out.println();
     }
 }

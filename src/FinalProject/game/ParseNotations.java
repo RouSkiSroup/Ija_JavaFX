@@ -6,8 +6,6 @@ import FinalProject.common.SpecialState;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO - check if promotion is valid: if figure is set when it needs to be and if everything is alright when it is set
-
 public class ParseNotations {
     public List<OneMove> parseFile(String file) {
         List<OneMove> notation = new ArrayList<>();
@@ -115,23 +113,31 @@ public class ParseNotations {
 
     private int parsePromotion(String line, OneMove move) {
         if(line.length() > 0 && Character.isLetter(line.charAt(0)) && Character.isUpperCase(line.charAt(0))) {
-            switch(line.charAt(0)) {
-                case 'D':
-                    move.setPromotion(FigureType.D);
-                    return 1;
-                case 'V':
-                    move.setPromotion(FigureType.V);
-                    return 1;
-                case 'S':
-                    move.setPromotion(FigureType.S);
-                    return 1;
-                case 'J':
-                    move.setPromotion(FigureType.J);
-                    return 1;
-                default:
-                    System.err.println("Chybna vymena figurky v notaci!");
-                    System.exit(1);
-                    return 1;
+            if(move.getFigure() == FigureType.p &&
+                    (move.getDestinationRow() == 0 || move.getDestinationRow() == 7)) {
+                switch(line.charAt(0)) {
+                    case 'D':
+                        move.setPromotion(FigureType.D);
+                        return 1;
+                    case 'V':
+                        move.setPromotion(FigureType.V);
+                        return 1;
+                    case 'S':
+                        move.setPromotion(FigureType.S);
+                        return 1;
+                    case 'J':
+                        move.setPromotion(FigureType.J);
+                        return 1;
+                    default:
+                        System.err.println("Chybna vymena figurky v notaci!");
+                        System.exit(1);
+                        return 1;
+                }
+            }
+            else {
+                System.err.println("Neni povolene vymenit figurku, i kdyz to notace pozaduje.");
+                System.exit(1);
+                return 1;
             }
         }
         else {
