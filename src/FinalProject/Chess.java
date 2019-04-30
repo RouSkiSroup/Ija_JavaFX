@@ -97,8 +97,9 @@ public class Chess {
             }
 
             if(checkCheck(this.counter % 2 == 0)) {
+                System.out.println("Sach.");
                 if(checkCheckmate(this.counter % 2 != 0)) {
-                    System.out.println("Konec hry - mat.");
+                    System.out.println("Mat.");
                     return 2;
                 }
             }
