@@ -7,22 +7,14 @@ import FinalProject.game.*;
 import java.util.*;
 
 public class Chess {
-    public Board board; //TODO make private
+    public Board board;
     private List<OneMove> moves;
     private Queue<UniversalFigure> figureQueue = new LinkedList<>();
     private int counter;
     private OneMove manualMove;
-    private BoardField undo_field;
-    private UniversalFigure undo_figure;
-    private UniversalFigure undo_capture;
 
     public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
-    public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
 
@@ -109,10 +101,9 @@ public class Chess {
             else {
                 if(checkCheckmate(this.counter % 2 != 0)) {
                     System.out.println("Pat.");
-                    return 2;
+                    return 3;
                 }
             }
-
             counter += 1;
             return 0;
         }
@@ -234,9 +225,9 @@ public class Chess {
 
     private boolean willUncheck(UniversalFigure figure, BoardField field, boolean isWhitesMove) {
         boolean uncheck = true;
-        this.undo_field = figure.getBoardField();
-        this.undo_figure = figure;
-        this.undo_capture = field.getFigure();
+        BoardField undo_field = figure.getBoardField();
+        UniversalFigure undo_figure = figure;
+        UniversalFigure undo_capture = field.getFigure();
 
         moveFigure(figure, field, null);
         if(checkCheck(!isWhitesMove)) {
@@ -277,13 +268,14 @@ public class Chess {
         this.counter = c;
     }
 
-    void buildMove(int col, int row, FigureType promotion_type) {
+    int buildMove(int col, int row, FigureType promotion_type) {
         col -= 1;
         row -= 1;
+        int retval = 0;
 
         if(manualMove.getSourceCol() == -1 && manualMove.getSourceRow() == -1) {
             if(this.board.getField(col, row).getFigure() == null) {
-                return;
+                return retval;
             }
             manualMove.setWhitePlayer(this.counter % 2 == 0);
             manualMove.setFigure(this.board.getField(col, row).getFigure().getType());
@@ -298,7 +290,6 @@ public class Chess {
                     (manualMove.getDestinationRow() == 0 || manualMove.getDestinationRow() == 7)) {
                 manualMove.setPromotion(promotion_type);
             }
-            // TODO - set special
 
             OneMove new_move = new OneMove(
                     manualMove.getWhitePlayer(),
@@ -317,12 +308,13 @@ public class Chess {
                 this.moves.remove(this.counter);
             }
             this.moves.add(new_move);
-            performMove();
+            retval = performMove();
         }
         else {
             System.err.println("ERROR: Vnitrni chyba vytvareni pohybu buildMove()!");
             System.exit(1);
         }
+        return retval;
     }
 
     public void printBoard() {

@@ -135,15 +135,10 @@ public class OneMove {
         this.special = null;
     }
 
-    public void print() {
-        System.out.println("Bily hrac: " + this.white_player);
-        /*
-        if(this.type != null) {
-            System.out.println("Notace: " + this.type.name());
-        }
-        */
+    public void debugPrint() {
+        System.out.println("White player: " + this.white_player);
         if(this.figure != null) {
-            System.out.println("Figurka: " + this.figure.name());
+            System.out.println("Figure: " + this.figure.name());
         }
         if(this.source_col != -1) {
             System.out.println("From col: " + getColAsString(this.source_col) + " " + this.source_col);
@@ -187,7 +182,12 @@ public class OneMove {
             ret += this.promotion.name();
         }
         if(this.special != null) {
-            ret += this.special.name();     // TODO - change to special characters as in notation
+            if(this.special == SpecialState.CHECK) {
+                ret += "+";
+            }
+            else if(this.special == SpecialState.CHECKMATE) {
+                ret += "#";
+            }
         }
         return ret;
     }
