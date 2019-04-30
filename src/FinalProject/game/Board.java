@@ -1,7 +1,7 @@
 package FinalProject.game;
 
 import FinalProject.common.FigureType;
-import FinalProject.common.UniversalFigure;
+import FinalProject.figures.UniversalFigure;
 
 import java.util.ArrayList;
 

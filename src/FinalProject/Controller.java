@@ -1,7 +1,7 @@
 package FinalProject;
 
 import FinalProject.common.FigureType;
-import FinalProject.common.UniversalFigure;
+import FinalProject.figures.UniversalFigure;
 import FinalProject.game.Board;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,16 +17,13 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 /**
  *  Class controls GUI.

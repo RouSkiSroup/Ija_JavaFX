@@ -1,7 +1,8 @@
-package FinalProject.game;
+package FinalProject.figures;
 
 import FinalProject.common.FigureType;
-import FinalProject.common.UniversalFigure;
+import FinalProject.figures.UniversalFigure;
+import FinalProject.game.BoardField;
 
 public class King extends UniversalFigure {
     public King(BoardField boardField, boolean white) {

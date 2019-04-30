@@ -1,6 +1,7 @@
 package FinalProject.game;
 
 import FinalProject.common.FigureType;
+import FinalProject.common.ReadFile;
 import FinalProject.common.SpecialState;
 
 import java.util.ArrayList;

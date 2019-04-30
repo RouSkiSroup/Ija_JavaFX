@@ -1,6 +1,6 @@
 package FinalProject.game;
 
-import FinalProject.common.UniversalFigure;
+import FinalProject.figures.UniversalFigure;
 
 /**
  * Class representing one field on the board.

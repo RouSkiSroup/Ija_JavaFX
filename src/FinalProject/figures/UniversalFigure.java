@@ -1,5 +1,6 @@
-package FinalProject.common;
+package FinalProject.figures;
 
+import FinalProject.common.FigureType;
 import FinalProject.game.Board;
 import FinalProject.game.BoardField;
 

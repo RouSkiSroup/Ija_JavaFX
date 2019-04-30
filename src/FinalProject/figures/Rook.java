@@ -1,7 +1,8 @@
-package FinalProject.game;
+package FinalProject.figures;
 
 import FinalProject.common.FigureType;
-import FinalProject.common.UniversalFigure;
+import FinalProject.figures.UniversalFigure;
+import FinalProject.game.BoardField;
 
 public class Rook extends UniversalFigure {
     public Rook(BoardField boardField, boolean white) {

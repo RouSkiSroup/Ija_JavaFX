@@ -1,7 +1,8 @@
-package FinalProject.game;
+package FinalProject.figures;
 
 import FinalProject.common.FigureType;
-import FinalProject.common.UniversalFigure;
+import FinalProject.figures.UniversalFigure;
+import FinalProject.game.BoardField;
 
 public class Pawn extends UniversalFigure {
     public Pawn(BoardField boardField, boolean white) {

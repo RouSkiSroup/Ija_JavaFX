@@ -2,7 +2,7 @@ package FinalProject;
 
 import FinalProject.common.FigureType;
 import FinalProject.common.SpecialState;
-import FinalProject.common.UniversalFigure;
+import FinalProject.figures.*;
 import FinalProject.game.*;
 
 import java.util.*;
