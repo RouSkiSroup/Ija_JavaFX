@@ -12,7 +12,6 @@ public class Chess {
     private Queue<UniversalFigure> figureQueue = new LinkedList<>();
     private int counter;
     private OneMove manualMove;
-    private boolean check;
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -67,13 +66,11 @@ public class Chess {
         return moves;
     }
 
-    // TODO - check if opponent is checked after move, if yes, set a check flag to true.
-
     /**
      * Performs move of figure.
      * @return  Success of this operation.
      */
-    boolean performMove() {
+    int performMove() {
         if(counter < getMoves().size()){
             System.out.println("Tah cislo " + (counter + 1));
 
@@ -83,7 +80,7 @@ public class Chess {
                     this.moves.get(this.counter).getDestinationCol(),
                     this.moves.get(this.counter).getDestinationRow());
             if(figure == null){
-                return false;
+                return 0;
             }
 
             moveFigure(figure, field);
@@ -91,7 +88,7 @@ public class Chess {
             if(checkCheck(this.counter % 2 != 0)) {
                 System.out.println("Nepovoleny tah - zpusobi sach od soupere.");
                 positionMove(this.counter);
-                return false;
+                return 0;
             }
 
             UniversalFigure newFigure = promote(figure, this.moves.get(counter));
@@ -100,19 +97,16 @@ public class Chess {
             }
 
             if(checkCheck(this.counter % 2 == 0)) {
-                this.check = true;
                 if(checkCheckmate(this.counter % 2 != 0)) {
                     System.out.println("Konec hry - mat.");
-                    // TODO - exit the game.
-                    return false;
+                    return 2;
                 }
             }
-
             counter += 1;
-            return true;
+            return 0;
         }
         else {
-            return false;
+            return 1;
         }
     }
 
@@ -223,14 +217,15 @@ public class Chess {
      * @return
      */
     private boolean checkCheckmate(boolean isWhitesMove) {
-        if(!this.check) {
-            return false;
-        }
         ArrayList<UniversalFigure> figures = this.board.getFiguresOfPlayer(!isWhitesMove);
         ArrayList<BoardField> fields = this.board.getSurroundingFields(
                 this.board.getKingOfPlayer(isWhitesMove).getBoardField());
+
+        // Iterate through all figures of player who checked the other player.
         for(UniversalFigure figure: figures) {
+            // Iterate through all fields that king of checked player can move to.
             for(BoardField field: fields) {
+                // Try if all fields that king can move to are also checked.
                 if(!figure.canMove(field)) {
                     return false;
                 }
