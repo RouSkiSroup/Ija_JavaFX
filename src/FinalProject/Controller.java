@@ -21,9 +21,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 /**
  * Class controls GUI.
@@ -34,6 +32,7 @@ public class Controller implements Initializable {
 
     public Pane sach;
     public Pane pat;
+    public ListView notationList3;
     ObservableList<String> figureChoice = FXCollections.observableArrayList("Dáma","Věž","Střelec","Jezdec");
 
     public TextArea NotationList;
@@ -119,6 +118,8 @@ public class Controller implements Initializable {
     private int sleepTime;
     private Timer timer;
     private TimerTask task;
+    private List<Chess> chessList;
+    private int gameCnt;
 
     /**
      * Initialize GUI.
@@ -131,6 +132,11 @@ public class Controller implements Initializable {
         this.chess = new Chess(board);
         this.stop = false;
         this.sleepTime = 0;
+        chessList = new ArrayList<>();
+        chessList.add(chess);
+        this.gameCnt = 1;
+        notationList3.getItems().addAll(gameCnt + ". hra");
+
 
         promoteChoice.setItems(figureChoice);
         promoteChoice.setValue("Dáma");
@@ -187,7 +193,7 @@ public class Controller implements Initializable {
     }
 
     /**
-     * Updates list of notations in GUI.
+     * Updates selected index of notations in GUI.
      */
     private void updateNotationList(){
         this.notationList2.getSelectionModel().select(chess.getCounter()-1);
@@ -445,6 +451,27 @@ public class Controller implements Initializable {
         this.fillBoard();
     }
 
+    public void setGame(MouseEvent mouseEvent) {
+        this.notationList2.getItems().clear();
+        int index = notationList3.getSelectionModel().getSelectedIndex();
+        this.chess = this.chessList.get(index);
+        this.fillBoard();
+        this.reloadNotation();
+    }
+
+    public void newGame(ActionEvent actionEvent) {
+        Board newBoard = new Board(8);
+        Chess newChess = new Chess(newBoard);
+        this.chessList.add(newChess);
+        this.chess = newChess;
+        this.gameCnt += 1;
+        this.notationList3.getItems().addAll(gameCnt + ". hra");
+        this.notationList3.getSelectionModel().select(gameCnt-1);
+        this.fillBoard();
+        this.notationList2.getItems().clear();
+        this.reloadNotation();
+    }
+
     /**
      * Represents clicking on one board field and sends the information to backend methods.
      * @param mouseEvent    Variable signalizing clicking on board field.
@@ -573,5 +600,8 @@ public class Controller implements Initializable {
             System.err.println("Soubor neni validni.");
         }
     }
+
+
+
 }
 
