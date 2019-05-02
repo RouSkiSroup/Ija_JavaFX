@@ -451,6 +451,10 @@ public class Controller implements Initializable {
         this.fillBoard();
     }
 
+    /**
+     * Changes game. Reloads notation list and figures.
+     * @param mouseEvent    Variable signalizing clicking into notation list.
+     */
     public void setGame(MouseEvent mouseEvent) {
         this.notationList2.getItems().clear();
         int index = notationList3.getSelectionModel().getSelectedIndex();
@@ -459,6 +463,10 @@ public class Controller implements Initializable {
         this.reloadNotation();
     }
 
+    /**
+     * Creates new game and reloads notation list and figures.
+     * @param actionEvent   Variable signalizing clicking on button.
+     */
     public void newGame(ActionEvent actionEvent) {
         Board newBoard = new Board(8);
         Chess newChess = new Chess(newBoard);
