@@ -280,9 +280,9 @@ public class Controller implements Initializable {
      * @return  Returns string representation of path to image.
      */
     private String getFigureImage(UniversalFigure figure){
-        String res = "src/images/";
+        String res = "lib/images/";
         if (figure != null) {
-            res = "src/images/";
+            res = "lib/images/";
             res = res + figure.getType().name();
             if (figure.isWhite()) {
                 res = res + "b";

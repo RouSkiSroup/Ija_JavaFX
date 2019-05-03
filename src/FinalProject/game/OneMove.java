@@ -204,17 +204,17 @@ public class OneMove {
         if(this.figure != null && this.figure != FigureType.p) {
             ret += this.figure.name();
         }
+        if(this.source_col != -1) {
+            ret += getColAsString(this.source_col);
+        }
         if(this.source_row != -1) {
             ret += getRowAsString(this.source_row);
-        }
-        if(this.destination_col != -1) {
-            ret += getColAsString(this.destination_col);
         }
         if(this.capture) {
             ret += "x";
         }
-        if(this.source_col != -1) {
-            ret += getColAsString(this.source_col);
+        if(this.destination_col != -1) {
+            ret += getColAsString(this.destination_col);
         }
         if(this.destination_row != -1) {
             ret += getRowAsString(this.destination_row);

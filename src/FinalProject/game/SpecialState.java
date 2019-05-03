@@ -6,5 +6,5 @@ package FinalProject.game;
 public enum SpecialState {
     CHECK,      // +
     CHECKMATE,  // #
-    DRAW        // 1/2-1/2
+    DRAW,       // 1/2-1/2
 }

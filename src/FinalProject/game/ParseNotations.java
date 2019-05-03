@@ -29,6 +29,15 @@ public class ParseNotations {
                 System.exit(1);
             }
             notation.add(parseMove(parsed_line[1], true));
+            if(parsed_line.length == 2) {
+                if ((line = reader.getLine()) == null){
+                    return notation;
+                }
+                else{
+                    System.err.println("Notace neni na konci a neobsahuje zapis pro tah černého.");
+                    System.exit(1);
+                }
+            }
             notation.add(parseMove(parsed_line[2], false));
             line = reader.getLine();
         }
@@ -59,6 +68,11 @@ public class ParseNotations {
             System.err.println("Notace tahu prilis dlouha!");
             System.exit(1);
         }
+//        System.out.println("dest row" + move.getDestinationRow());
+//        System.out.println("dest col" + move.getDestinationCol());
+//        System.out.println("fogure " + move.getFigure());
+//        System.out.println("source row " + move.getSourceRow());
+//        System.out.println("source col " + move.getSourceCol());
         return move;
     }
 
@@ -124,6 +138,13 @@ public class ParseNotations {
      * @return  How many characters were processed.
      */
     private int parseLocations(String moveAsString, OneMove move) {
+        boolean isCapture = false;
+        //Check capture in long notation
+        if((moveAsString.length() > 2) && (moveAsString.charAt(2) == 'x')){
+            parseCapture(moveAsString.substring(2),move);
+            moveAsString = moveAsString.substring(0,2) + moveAsString.substring(3);
+            isCapture = true;
+        }
         // Loading source and destination
         if(moveAsString.length() > 3 &&
                 Character.isLetter(moveAsString.charAt(0)) && Character.isLowerCase(moveAsString.charAt(0)) &&
@@ -134,7 +155,7 @@ public class ParseNotations {
             move.setSourceRow(Character.getNumericValue(moveAsString.charAt(1)) - 1);
             move.setDestinationCol((int)moveAsString.charAt(2) - 97);
             move.setDestinationRow(Character.getNumericValue(moveAsString.charAt(3)) - 1);;
-            return 4;
+            return isCapture ? 5 : 4;
         }
         // Loading only destination
         else if(moveAsString.length() > 1  &&
@@ -206,6 +227,7 @@ public class ParseNotations {
                 move.setSpecial(SpecialState.CHECKMATE);
             }
             else {
+                System.out.println(moveAsString);
                 System.err.println("Neznamy specialni znak v notaci");
                 System.exit(1);
             }
