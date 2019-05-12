@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="GameOfChess" default="jar" basedir=".">
+<project name="GameOfChess" default="compile" basedir=".">
 
 
-	<target name="compile" >
+	<target name="prepare_compile" >
 		<mkdir dir="build/classes"/>
         <javac srcdir="src" destdir="build/classes" />
 		<copy file="src/FinalProject/gui.fxml" tofile="build/classes/FinalProject/gui.fxml"/>
     </target>
 
-    <target name="jar" depends="compile">
+    <target name="compile" depends="prepare_compile">
 		<mkdir dir="dest"/>
         <jar destfile="dest/ija-app.jar" basedir="build/classes">
             <manifest>
