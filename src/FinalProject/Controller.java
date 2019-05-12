@@ -210,21 +210,22 @@ public class Controller implements Initializable {
             public void run()
             {
                 int tmp;
-                if ((tmp = chess.performMove()) == 0){
-                    notationList2.getSelectionModel().select(chess.getCounter()-1);
-                    ImageView view;
-                    File file;
-                    Image image;
-                    String imagePath;
-                    for (int i = 1; i < 9; i ++){
-                        for (int j = 1; j < 9; j ++){
-                            view = getViewByIndex(i,j);
-                            imagePath = getFigureImage(chess.board.board[i-1][j-1].getFigure());
-                            file = new File(imagePath);
-                            image = new Image(file.toURI().toString());
-                            view.setImage(image);
-                        }
+                tmp = chess.performMove();
+                ImageView view;
+                File file;
+                Image image;
+                String imagePath;
+                for (int i = 1; i < 9; i ++){
+                    for (int j = 1; j < 9; j ++){
+                        view = getViewByIndex(i,j);
+                        imagePath = getFigureImage(chess.board.board[i-1][j-1].getFigure());
+                        file = new File(imagePath);
+                        image = new Image(file.toURI().toString());
+                        view.setImage(image);
                     }
+                }
+                if (tmp == 0){
+                    notationList2.getSelectionModel().select(chess.getCounter()-1);
                 }
                 else{
                     timer.cancel();
