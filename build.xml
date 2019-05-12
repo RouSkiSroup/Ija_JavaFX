@@ -9,8 +9,8 @@
     </target>
 
     <target name="jar" depends="compile">
-		<mkdir dir="build/jar"/>
-        <jar destfile="build/jar/GameOfChess.jar" basedir="build/classes">
+		<mkdir dir="dest"/>
+        <jar destfile="dest/ija-app.jar" basedir="build/classes">
             <manifest>
                 <attribute name="Main-Class" value="FinalProject.Game"/>
             </manifest>
@@ -18,7 +18,7 @@
     </target>
 
     <target name="run">
-    	<java jar="build/jar/GameOfChess.jar" fork="true"/>
+    	<java jar="dest/ija-app.jar" fork="true"/>
     </target>
 
 	<target name="clean" description="clean up">
